@@ -10,6 +10,7 @@ import ScrambleDisplay from "./scramble-display";
 import { Alg } from "cubing/alg";
 import { useSession } from "./lib/useSession";
 import { EventID } from "./lib/events";
+import EventSwitch from "./event-switch";
 
 async function genScramble(event: EventID) {
   return randomScrambleForEvent(event);
@@ -20,11 +21,13 @@ function App() {
   const [scramble, setScramble] = useState<Alg>();
   const {
     addAttempt,
+    deleteAttempt,
     currentSession,
     sessions,
     changeSession,
     attempts,
     createSession,
+    changeEvent,
   } = useSession();
 
   const solveDone = useCallback(
@@ -55,21 +58,27 @@ function App() {
   }, [currentSession]);
 
   return (
-    <div className="grid grid-cols-[1fr_3fr] grid-rows-3">
+    <div className="grid grid-cols-[1fr_3fr]">
       <Stats
-        className="row-span-3"
         attempts={attempts}
         currentSession={currentSession}
         sessions={sessions}
         changeSession={changeSession}
         createSession={createSession}
+        deleteAttempt={deleteAttempt}
       />
-      <ScrambleBar scramble={scramble?.toString()} />
-      <Timer state={state} time={time} />
-      <ScrambleDisplay
-        scramble={scramble}
-        event={currentSession?.event ?? "333"}
-      />
+      <div>
+        <EventSwitch
+          currentSession={currentSession}
+          changeEvent={changeEvent}
+        />
+        <ScrambleBar scramble={scramble?.toString()} />
+        <Timer state={state} time={time} />
+        <ScrambleDisplay
+          scramble={scramble}
+          event={currentSession?.event ?? "333"}
+        />
+      </div>
     </div>
   );
 }

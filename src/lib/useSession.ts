@@ -68,6 +68,12 @@ export function useSession() {
     [db]
   );
 
+  const setAttemptsFromDB = useCallback(() => {
+    attemptDB.current.allDocs({ include_docs: true }).then((res) => {
+      setAttempts(res.rows.map((row) => row.doc as unknown as AttemptData));
+    });
+  }, []);
+
   const addAttempt = useCallback(
     (time: number) => {
       const date = Date.now();
@@ -76,14 +82,40 @@ export function useSession() {
         unixDate: date,
         totalResultMs: time,
       };
-      console.log("attempt db", attemptDB.current.name);
       attemptDB.current.put(attempt).then(() => {
-        attemptDB.current.allDocs({ include_docs: true }).then((res) => {
-          setAttempts(res.rows.map((row) => row.doc as unknown as AttemptData));
-        });
+        setAttemptsFromDB();
       });
     },
-    [attemptDB]
+    [attemptDB, setAttemptsFromDB]
+  );
+
+  const deleteAttempt = useCallback(
+    (id: string) => {
+      attemptDB.current
+        .get(id)
+        .then((doc) => {
+          return attemptDB.current.remove(doc);
+        })
+        .then(() => {
+          setAttemptsFromDB();
+        });
+    },
+    [attemptDB, setAttemptsFromDB]
+  );
+
+  const changeEvent = useCallback(
+    (name: EventID) => {
+      if (!session) return;
+      db.current.get(session._id).then((doc) => {
+        return db.current.put({
+          _id: session._id,
+          _rev: doc._rev,
+          event: name,
+        });
+      });
+      setSession({ ...session, event: name });
+    },
+    [db, session]
   );
 
   return {
@@ -92,6 +124,10 @@ export function useSession() {
     changeSession,
     createSession,
     addAttempt,
+    deleteAttempt,
     attempts,
+    changeEvent,
   };
 }
+
+export type SessionType = ReturnType<typeof useSession>;

@@ -6,44 +6,44 @@ import {
 } from "@nextui-org/dropdown";
 import { Button } from "@nextui-org/button";
 import { Session } from "./lib/useSession";
+import { EventID, eventList } from "./lib/events";
 
-function SessionSwitch({
+function EventSwitch({
   currentSession,
-  sessions,
-  changeSession,
-  createSession,
+  changeEvent,
 }: {
   currentSession: Session | undefined;
-  sessions: Session[];
-  changeSession: (name: string) => void;
-  createSession: (name: string) => void;
+  changeEvent: (name: EventID) => void;
 }) {
   return (
     <div className="flex justify-center">
       <Dropdown>
         <DropdownTrigger>
-          <Button variant="bordered" className=" w-max">
-            {currentSession?._id}
+          <Button
+            variant="bordered"
+            className=" text-center text-2xl bg-content1"
+          >
+            {currentSession?.event}
           </Button>
         </DropdownTrigger>
         <DropdownMenu
-          aria-label="Session switcher"
+          aria-label="Event switcher"
           variant="flat"
           disallowEmptySelection
           selectionMode="single"
-          className=" shadow-md rounded-md"
           onSelectionChange={(keys) => {
-            changeSession(Array.from(keys).at(0) as string);
+            changeEvent(Array.from(keys).at(0) as EventID);
           }}
         >
-          {sessions.map((session) => (
-            <DropdownItem key={session._id}>{session._id}</DropdownItem>
+          {eventList.map((event) => (
+            <DropdownItem key={event} aria-label={event}>
+              <div className="text-2xl text-center">{event}</div>
+            </DropdownItem>
           ))}
         </DropdownMenu>
       </Dropdown>
-      <Button onClick={() => createSession("test")}>new session</Button>
     </div>
   );
 }
 
-export default SessionSwitch;
+export default EventSwitch;
