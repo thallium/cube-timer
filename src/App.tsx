@@ -58,7 +58,7 @@ function App() {
   }, [currentSession]);
 
   return (
-    <div className="grid grid-cols-[1fr_3fr]">
+    <div className="sm:grid grid-cols-[1fr_3fr] h-svh">
       <Stats
         attempts={attempts}
         currentSession={currentSession}
@@ -66,13 +66,16 @@ function App() {
         changeSession={changeSession}
         createSession={createSession}
         deleteAttempt={deleteAttempt}
+        className=" bg-default-100 py-4"
       />
-      <div>
-        <EventSwitch
-          currentSession={currentSession}
-          changeEvent={changeEvent}
-        />
-        <ScrambleBar scramble={scramble?.toString()} />
+      <div className=" flex flex-col justify-between py-4">
+        <div>
+          <EventSwitch
+            currentSession={currentSession}
+            changeEvent={changeEvent}
+          />
+          <ScrambleBar scramble={scramble?.toString()} />
+        </div>
         <Timer state={state} time={time} />
         <ScrambleDisplay
           scramble={scramble}

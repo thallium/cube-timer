@@ -7,6 +7,7 @@ import {
 import { Button } from "@nextui-org/button";
 import { Session } from "./lib/useSession";
 import { EventID, eventList } from "./lib/events";
+import { cn } from "./lib/utils";
 
 function EventSwitch({
   currentSession,
@@ -17,10 +18,11 @@ function EventSwitch({
 }) {
   return (
     <div className="flex justify-center">
-      <Dropdown>
+      <Dropdown className="shadow-lg">
         <DropdownTrigger>
           <Button
             variant="bordered"
+            radius="sm"
             className=" text-center text-2xl bg-content1"
           >
             {currentSession?.event}
@@ -29,14 +31,19 @@ function EventSwitch({
         <DropdownMenu
           aria-label="Event switcher"
           variant="flat"
-          disallowEmptySelection
-          selectionMode="single"
-          onSelectionChange={(keys) => {
-            changeEvent(Array.from(keys).at(0) as EventID);
+          onAction={(key) => {
+            changeEvent(key as EventID);
           }}
+          className="rounded"
         >
           {eventList.map((event) => (
-            <DropdownItem key={event} aria-label={event}>
+            <DropdownItem
+              key={event}
+              aria-label={event}
+              className={cn({
+                "text-primary": event === currentSession?.event,
+              })}
+            >
               <div className="text-2xl text-center">{event}</div>
             </DropdownItem>
           ))}

@@ -53,6 +53,7 @@ export function useSession() {
 
   const createSession = useCallback(
     (name: string) => {
+      if (!name) return;
       db.current
         .put({
           _id: name,

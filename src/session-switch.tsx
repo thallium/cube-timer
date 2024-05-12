@@ -6,6 +6,10 @@ import {
 } from "@nextui-org/dropdown";
 import { Button } from "@nextui-org/button";
 import { Session } from "./lib/useSession";
+import { Plus } from "lucide-react";
+import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
+import { Input } from "@nextui-org/input";
+import { useState } from "react";
 
 function SessionSwitch({
   currentSession,
@@ -18,30 +22,71 @@ function SessionSwitch({
   changeSession: (name: string) => void;
   createSession: (name: string) => void;
 }) {
+  const [newSessionName, setNewSessionName] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="flex justify-center">
-      <Dropdown>
+      <Dropdown className=" shadow-lg">
         <DropdownTrigger>
-          <Button variant="bordered" className=" w-max">
+          <Button variant="bordered" className=" text-2xl">
             {currentSession?._id}
           </Button>
         </DropdownTrigger>
         <DropdownMenu
           aria-label="Session switcher"
           variant="flat"
-          disallowEmptySelection
-          selectionMode="single"
-          className=" shadow-md rounded-md"
-          onSelectionChange={(keys) => {
-            changeSession(Array.from(keys).at(0) as string);
+          onAction={(key) => {
+            changeSession(key as string);
           }}
+          items={sessions}
         >
-          {sessions.map((session) => (
-            <DropdownItem key={session._id}>{session._id}</DropdownItem>
-          ))}
+          {(session) => (
+            <DropdownItem
+              key={session._id}
+              className={
+                session._id === currentSession?._id ? " text-primary" : ""
+              }
+            >
+              <div className="text-2xl text-center">{session._id}</div>
+            </DropdownItem>
+          )}
         </DropdownMenu>
       </Dropdown>
-      <Button onClick={() => createSession("test")}>new session</Button>
+      <Popover
+        placement="bottom"
+        showArrow={true}
+        isOpen={isOpen}
+        onOpenChange={(open) => setIsOpen(open)}
+      >
+        <PopoverTrigger>
+          <Button isIconOnly variant="light">
+            <Plus />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className=" shadow-lg">
+          <div className=" flex justify-center p-2 items-center">
+            <Input
+              variant="bordered"
+              size="md"
+              type="text"
+              value={newSessionName}
+              onValueChange={setNewSessionName}
+            />
+            <Button
+              variant="light"
+              onClick={() => {
+                createSession(newSessionName);
+                setNewSessionName("");
+                setIsOpen(false);
+              }}
+              className=" text-xl"
+            >
+              Create
+            </Button>
+          </div>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }

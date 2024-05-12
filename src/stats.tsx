@@ -25,11 +25,7 @@ function Stats({
 }) {
   return (
     <div
-      className={cn(
-        className,
-        "overflow-y-scroll max-h-lvh py-2",
-        "session_" + currentSession?._id
-      )}
+      className={cn(className, "hidden overflow-y-scroll max-h-lvh sm:block")}
     >
       <SessionSwitch
         sessions={sessions}
