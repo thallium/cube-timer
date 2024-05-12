@@ -4,8 +4,8 @@ A Rubik's cube timer built with React, PouchDB and cubing.js. This project is st
 
 ## TODO List
 
-[-] Stage timer (you can control it by sound)
-[-] Sync across devices
-[-] Mobile and PWA support
-[-] UI improvement
-[-] Stackmat support
+- Stage timer (you can control it by sound)
+- Sync across devices
+- Mobile and PWA support
+- UI improvement
+- Stackmat support
