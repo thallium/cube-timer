@@ -27,9 +27,9 @@ function SessionSwitch({
 
   return (
     <div className="flex justify-center">
-      <Dropdown className=" shadow-lg">
+      <Dropdown className="shadow-lg">
         <DropdownTrigger>
-          <Button variant="bordered" className=" text-2xl">
+          <Button variant="bordered" className="text-2xl">
             {currentSession?._id}
           </Button>
         </DropdownTrigger>
@@ -45,10 +45,10 @@ function SessionSwitch({
             <DropdownItem
               key={session._id}
               className={
-                session._id === currentSession?._id ? " text-primary" : ""
+                session._id === currentSession?._id ? "text-primary" : ""
               }
             >
-              <div className="text-2xl text-center">{session._id}</div>
+              <div className="text-center text-2xl">{session._id}</div>
             </DropdownItem>
           )}
         </DropdownMenu>
@@ -64,8 +64,8 @@ function SessionSwitch({
             <Plus />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className=" shadow-lg">
-          <div className=" flex justify-center p-2 items-center">
+        <PopoverContent className="shadow-lg">
+          <div className="flex items-center justify-center p-2">
             <Input
               variant="bordered"
               size="md"
@@ -80,7 +80,7 @@ function SessionSwitch({
                 setNewSessionName("");
                 setIsOpen(false);
               }}
-              className=" text-xl"
+              className="text-xl"
             >
               Create
             </Button>

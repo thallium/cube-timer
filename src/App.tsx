@@ -34,7 +34,7 @@ function App() {
     (time: number) => {
       addAttempt(time, scramble);
     },
-    [addAttempt, scramble]
+    [addAttempt, scramble],
   );
 
   const newAttempt = useCallback(() => {
@@ -60,7 +60,7 @@ function App() {
   }, [currentSession]);
 
   return (
-    <div className="sm:grid grid-cols-[1fr_3fr] h-screen">
+    <div className="h-dvh grid-cols-[1fr_3fr] sm:grid">
       <Stats
         attempts={attempts}
         currentSession={currentSession}
@@ -68,9 +68,9 @@ function App() {
         changeSession={changeSession}
         createSession={createSession}
         deleteAttempt={deleteAttempt}
-        className=" bg-default-100 py-4"
+        className="bg-default-100 py-4"
       />
-      <div className="py-4 h-screen flex flex-col">
+      <div className="flex h-dvh flex-col py-4">
         <div>
           <EventSwitch
             currentSession={currentSession}
@@ -78,7 +78,7 @@ function App() {
           />
           <ScrambleBar scramble={scramble?.toString()} />
         </div>
-        <div className="grow flex flex-col" ref={touchArea}>
+        <div className="flex grow flex-col" ref={touchArea}>
           <Timer state={state} time={time} className=" grow" />
           <ScrambleDisplay
             scramble={scramble}

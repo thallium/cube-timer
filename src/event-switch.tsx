@@ -23,7 +23,7 @@ function EventSwitch({
           <Button
             variant="bordered"
             radius="sm"
-            className=" text-center text-2xl bg-content1"
+            className="bg-content1 text-center text-2xl"
           >
             {currentSession?.event}
           </Button>
@@ -44,7 +44,7 @@ function EventSwitch({
                 "text-primary": event === currentSession?.event,
               })}
             >
-              <div className="text-2xl text-center">{event}</div>
+              <div className="text-center text-2xl">{event}</div>
             </DropdownItem>
           ))}
         </DropdownMenu>

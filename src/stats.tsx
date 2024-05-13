@@ -25,7 +25,7 @@ function Stats({
 }) {
   return (
     <div
-      className={cn(className, "hidden overflow-y-scroll max-h-lvh sm:block")}
+      className={cn(className, "hidden max-h-lvh overflow-y-scroll sm:block")}
     >
       <SessionSwitch
         sessions={sessions}
@@ -39,7 +39,7 @@ function Stats({
         return (
           <div
             key={_id}
-            className="flex flex-row items-center my-2 justify-center"
+            className="my-2 flex flex-row items-center justify-center"
           >
             <div className="text-center text-2xl">
               {`${secRest}.${decimals}`}

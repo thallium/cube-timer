@@ -49,7 +49,7 @@ export function useSession() {
         setAttempts(res.rows.map((row) => row.doc as unknown as AttemptData));
       });
     },
-    [db, attemptDB]
+    [db, attemptDB],
   );
 
   const createSession = useCallback(
@@ -67,7 +67,7 @@ export function useSession() {
           console.log(res);
         });
     },
-    [db]
+    [db],
   );
 
   const setAttemptsFromDB = useCallback(() => {
@@ -89,7 +89,7 @@ export function useSession() {
         setAttemptsFromDB();
       });
     },
-    [attemptDB, setAttemptsFromDB]
+    [attemptDB, setAttemptsFromDB],
   );
 
   const deleteAttempt = useCallback(
@@ -103,7 +103,7 @@ export function useSession() {
           setAttemptsFromDB();
         });
     },
-    [attemptDB, setAttemptsFromDB]
+    [attemptDB, setAttemptsFromDB],
   );
 
   const changeEvent = useCallback(
@@ -118,7 +118,7 @@ export function useSession() {
       });
       setSession({ ...session, event: name });
     },
-    [db, session]
+    [db, session],
   );
 
   return {

@@ -13,9 +13,9 @@ function Timer({
 }) {
   const { secRest, decimals } = timeParts(time);
   return (
-    <div className={cn(className, "flex justify-center items-center")}>
+    <div className={cn(className, "flex items-center justify-center")}>
       <h1
-        className={cn("text-9xl font-mono", {
+        className={cn("font-mono text-9xl", {
           "text-red-600": state === State.HandOnTimer,
         })}
       >{`${secRest}.${decimals}`}</h1>
