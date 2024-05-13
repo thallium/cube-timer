@@ -15,7 +15,7 @@ function Timer({
   return (
     <div className={cn(className, "flex items-center justify-center")}>
       <h1
-        className={cn("font-mono text-9xl", {
+        className={cn("font-mono text-5xl sm:text-9xl", {
           "text-red-600": state === State.HandOnTimer,
         })}
       >{`${secRest}.${decimals}`}</h1>
