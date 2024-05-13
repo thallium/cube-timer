@@ -13,6 +13,7 @@
     "@nextui-org/button": "^2.0.31",
     "@nextui-org/dropdown": "^2.1.23",
     "@nextui-org/input": "^2.1.21",
+    "@nextui-org/modal": "^2.0.33",
     "@nextui-org/popover": "^2.1.21",
     "@nextui-org/system": "^2.1.2",
     "@nextui-org/theme": "^2.2.3",
@@ -21,12 +22,15 @@
     "cubing": "^0.48.4",
     "events": "^3.3.0",
     "framer-motion": "^11.1.9",
+    "localforage": "^1.10.0",
     "lucide-react": "^0.378.0",
     "pouchdb-browser": "^8.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.23.1",
     "register-service-worker": "^1.7.2",
     "tailwind-merge": "^2.3.0",
+    "use-media": "^1.5.0",
     "use-pouchdb": "^2.0.2"
   },
   "devDependencies": {

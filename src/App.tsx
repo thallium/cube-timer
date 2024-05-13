@@ -1,16 +1,16 @@
 import "./App.css";
 import useTimer from "./timing/useTimer";
 import useController from "./timing/useController";
-import Stats from "./stats";
-import ScrambleBar from "./scramble-bar";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { randomScrambleForEvent } from "cubing/scramble";
-import Timer from "./timer";
-import ScrambleDisplay from "./scramble-display";
 import { Alg } from "cubing/alg";
 import { useSession } from "./lib/useSession";
 import { EventID } from "./lib/events";
-import EventSwitch from "./event-switch";
+import { useMedia } from "use-media";
+import DeskTopView from "./desktop-view";
+import MobileView from "./mobile-view";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import MobileResults from "./mobile-results";
 
 async function genScramble(event: EventID) {
   return randomScrambleForEvent(event);
@@ -59,34 +59,60 @@ function App() {
     });
   }, [currentSession]);
 
+  const isWide = useMedia({ minWidth: "640px" });
+
   return (
-    <div className="h-dvh select-none grid-cols-[1fr_3fr] sm:grid">
-      <Stats
-        attempts={attempts}
-        currentSession={currentSession}
-        sessions={sessions}
-        changeSession={changeSession}
-        createSession={createSession}
-        deleteAttempt={deleteAttempt}
-        className="bg-default-100 py-4"
-      />
-      <div className="flex h-dvh touch-none flex-col py-4">
-        <div>
-          <EventSwitch
-            currentSession={currentSession}
-            changeEvent={changeEvent}
-          />
-          <ScrambleBar scramble={scramble?.toString()} />
-        </div>
-        <div className="flex grow flex-col" ref={touchArea}>
-          <Timer state={state} time={time} className=" grow" />
-          <ScrambleDisplay
-            scramble={scramble}
-            event={currentSession?.event ?? "333"}
-          />
-        </div>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            isWide ? (
+              <DeskTopView
+                attempts={attempts}
+                currentSession={currentSession}
+                sessions={sessions}
+                changeSession={changeSession}
+                createSession={createSession}
+                deleteAttempt={deleteAttempt}
+                changeEvent={changeEvent}
+                scramble={scramble}
+                touchArea={touchArea}
+                state={state}
+                time={time}
+              />
+            ) : (
+              <MobileView
+                attempts={attempts}
+                currentSession={currentSession}
+                sessions={sessions}
+                changeSession={changeSession}
+                createSession={createSession}
+                deleteAttempt={deleteAttempt}
+                changeEvent={changeEvent}
+                scramble={scramble}
+                touchArea={touchArea}
+                state={state}
+                time={time}
+              />
+            )
+          }
+        />
+        <Route
+          path="/results"
+          element={
+            <MobileResults
+              attempts={attempts}
+              currentSession={currentSession}
+              sessions={sessions}
+              changeSession={changeSession}
+              createSession={createSession}
+              deleteAttempt={deleteAttempt}
+            />
+          }
+        />
+      </Routes>
+    </Router>
   );
 }
 

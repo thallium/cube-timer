@@ -24,9 +24,7 @@ function Stats({
   deleteAttempt: (id: string) => void;
 }) {
   return (
-    <div
-      className={cn(className, "hidden max-h-lvh overflow-y-scroll sm:block")}
-    >
+    <div className={cn(className, "max-h-lvh overflow-y-scroll")}>
       <SessionSwitch
         sessions={sessions}
         currentSession={currentSession}
