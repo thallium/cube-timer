@@ -29,6 +29,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1",
     "tailwind-merge": "^2.3.0",
+    "tailwindcss-safe-area": "^0.5.1",
     "use-media": "^1.5.0"
   },
   "devDependencies": {
