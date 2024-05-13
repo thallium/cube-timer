@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { EventID } from "./events";
 import { AttemptData } from "./attempt-data";
 import PouchDB from "pouchdb-browser";
+import { Alg } from "cubing/alg";
 
 export type Session = {
   _id: string; // id is the name of the group
@@ -76,12 +77,13 @@ export function useSession() {
   }, []);
 
   const addAttempt = useCallback(
-    (time: number) => {
+    (time: number, scramble: Alg | undefined) => {
       const date = Date.now();
       const attempt: AttemptData = {
         _id: date.toString(),
         unixDate: date,
         totalResultMs: time,
+        scramble: scramble?.toString(),
       };
       attemptDB.current.put(attempt).then(() => {
         setAttemptsFromDB();

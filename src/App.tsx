@@ -3,7 +3,7 @@ import useTimer from "./timing/useTimer";
 import useController from "./timing/useController";
 import Stats from "./stats";
 import ScrambleBar from "./scramble-bar";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { randomScrambleForEvent } from "cubing/scramble";
 import Timer from "./timer";
 import ScrambleDisplay from "./scramble-display";
@@ -32,9 +32,9 @@ function App() {
 
   const solveDone = useCallback(
     (time: number) => {
-      addAttempt(time);
+      addAttempt(time, scramble);
     },
-    [addAttempt]
+    [addAttempt, scramble]
   );
 
   const newAttempt = useCallback(() => {
@@ -43,12 +43,14 @@ function App() {
     });
   }, [currentSession]);
 
+  const touchArea = useRef<HTMLDivElement>(null);
   const { state } = useController({
     startTimer: start,
     stopTimer: stop,
     resetTimer: reset,
     solveDoneCallback: solveDone,
     newAttemptCallback: newAttempt,
+    touchArea: touchArea.current!,
   });
 
   useEffect(() => {
@@ -58,7 +60,7 @@ function App() {
   }, [currentSession]);
 
   return (
-    <div className="sm:grid grid-cols-[1fr_3fr] h-svh">
+    <div className="sm:grid grid-cols-[1fr_3fr] h-screen">
       <Stats
         attempts={attempts}
         currentSession={currentSession}
@@ -68,7 +70,7 @@ function App() {
         deleteAttempt={deleteAttempt}
         className=" bg-default-100 py-4"
       />
-      <div className=" flex flex-col justify-between py-4">
+      <div className="py-4 h-screen flex flex-col">
         <div>
           <EventSwitch
             currentSession={currentSession}
@@ -76,11 +78,13 @@ function App() {
           />
           <ScrambleBar scramble={scramble?.toString()} />
         </div>
-        <Timer state={state} time={time} />
-        <ScrambleDisplay
-          scramble={scramble}
-          event={currentSession?.event ?? "333"}
-        />
+        <div className="grow flex flex-col" ref={touchArea}>
+          <Timer state={state} time={time} className=" grow" />
+          <ScrambleDisplay
+            scramble={scramble}
+            event={currentSession?.event ?? "333"}
+          />
+        </div>
       </div>
     </div>
   );

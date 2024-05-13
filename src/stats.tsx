@@ -37,8 +37,11 @@ function Stats({
         const { _id, totalResultMs } = row;
         const { secRest, decimals } = timeParts(totalResultMs);
         return (
-          <div className="flex flex-row items-center my-2 justify-center">
-            <div key={_id} className="text-center text-2xl">
+          <div
+            key={_id}
+            className="flex flex-row items-center my-2 justify-center"
+          >
+            <div className="text-center text-2xl">
               {`${secRest}.${decimals}`}
             </div>
             <Button
