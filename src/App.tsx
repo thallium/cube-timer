@@ -70,7 +70,7 @@ function App() {
         deleteAttempt={deleteAttempt}
         className="bg-default-100 py-4"
       />
-      <div className="flex h-dvh flex-col py-4">
+      <div className="flex h-dvh touch-none flex-col py-4">
         <div>
           <EventSwitch
             currentSession={currentSession}
