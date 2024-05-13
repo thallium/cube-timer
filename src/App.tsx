@@ -60,7 +60,7 @@ function App() {
   }, [currentSession]);
 
   return (
-    <div className="h-dvh grid-cols-[1fr_3fr] sm:grid">
+    <div className="h-dvh select-none grid-cols-[1fr_3fr] sm:grid">
       <Stats
         attempts={attempts}
         currentSession={currentSession}
