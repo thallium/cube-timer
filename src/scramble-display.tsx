@@ -12,6 +12,7 @@ const eventToPuzzle = {
   "666": "6x6x6",
   "777": "7x7x7",
 } as const;
+
 function ScrambleDisplay({
   scramble,
   event,

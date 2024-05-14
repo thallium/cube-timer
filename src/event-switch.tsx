@@ -1,21 +1,15 @@
+import { Button } from "@nextui-org/button";
 import {
   Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
   DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
 } from "@nextui-org/dropdown";
-import { Button } from "@nextui-org/button";
-import { Session } from "./lib/useSession";
 import { EventID, eventList } from "./lib/events";
+import { SessionType } from "./lib/useSession";
 import { cn } from "./lib/utils";
 
-function EventSwitch({
-  currentSession,
-  changeEvent,
-}: {
-  currentSession: Session | undefined;
-  changeEvent: (name: EventID) => void;
-}) {
+function EventSwitch({ session }: { session: SessionType }) {
   return (
     <div className="flex justify-center">
       <Dropdown className="shadow-lg">
@@ -25,14 +19,14 @@ function EventSwitch({
             radius="sm"
             className="bg-content1 text-center text-2xl"
           >
-            {currentSession?.event}
+            {session.currentSession?.event}
           </Button>
         </DropdownTrigger>
         <DropdownMenu
           aria-label="Event switcher"
           variant="flat"
           onAction={(key) => {
-            changeEvent(key as EventID);
+            session.changeEvent(key as EventID);
           }}
           className="rounded"
         >
@@ -41,7 +35,7 @@ function EventSwitch({
               key={event}
               aria-label={event}
               className={cn({
-                "text-primary": event === currentSession?.event,
+                "text-primary": event === session.currentSession?.event,
               })}
             >
               <div className="text-center text-2xl">{event}</div>

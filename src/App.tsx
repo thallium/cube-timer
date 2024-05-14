@@ -1,16 +1,17 @@
-import "./App.css";
-import useTimer from "./timing/useTimer";
-import useController from "./timing/useController";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { randomScrambleForEvent } from "cubing/scramble";
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Alg } from "cubing/alg";
-import { useSession } from "./lib/useSession";
-import { EventID } from "./lib/events";
+import { randomScrambleForEvent } from "cubing/scramble";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { useMedia } from "use-media";
+import "./App.css";
 import DeskTopView from "./desktop-view";
-import MobileView from "./mobile-view";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { EventID } from "./lib/events";
+import { useSession } from "./lib/useSession";
 import MobileResults from "./mobile-results";
+import MobileView from "./mobile-view";
+import useController from "./timing/useController";
+import useTimer from "./timing/useTimer";
 
 async function genScramble(event: EventID) {
   return randomScrambleForEvent(event);
@@ -19,29 +20,20 @@ async function genScramble(event: EventID) {
 function App() {
   const { time, start, stop, reset } = useTimer();
   const [scramble, setScramble] = useState<Alg>();
-  const {
-    addAttempt,
-    deleteAttempt,
-    currentSession,
-    sessions,
-    changeSession,
-    attempts,
-    createSession,
-    changeEvent,
-  } = useSession();
+  const session = useSession();
 
   const solveDone = useCallback(
     (time: number) => {
-      addAttempt(time, scramble);
+      session.addAttempt(time, scramble);
     },
-    [addAttempt, scramble],
+    [session.addAttempt, scramble],
   );
 
   const newAttempt = useCallback(() => {
-    genScramble(currentSession?.event ?? "333").then((scramble) => {
+    genScramble(session.currentSession?.event ?? "333").then((scramble) => {
       setScramble(scramble);
     });
-  }, [currentSession]);
+  }, [session.currentSession]);
 
   const touchArea = useRef<HTMLDivElement>(null);
   const { state } = useController({
@@ -54,10 +46,10 @@ function App() {
   });
 
   useEffect(() => {
-    genScramble(currentSession?.event ?? "333").then((scramble) => {
+    genScramble(session.currentSession?.event ?? "333").then((scramble) => {
       setScramble(scramble);
     });
-  }, [currentSession]);
+  }, [session.currentSession]);
 
   const isWide = useMedia({ minWidth: "640px" });
 
@@ -69,13 +61,7 @@ function App() {
           element={
             isWide ? (
               <DeskTopView
-                attempts={attempts}
-                currentSession={currentSession}
-                sessions={sessions}
-                changeSession={changeSession}
-                createSession={createSession}
-                deleteAttempt={deleteAttempt}
-                changeEvent={changeEvent}
+                session={session}
                 scramble={scramble}
                 touchArea={touchArea}
                 state={state}
@@ -83,13 +69,7 @@ function App() {
               />
             ) : (
               <MobileView
-                attempts={attempts}
-                currentSession={currentSession}
-                sessions={sessions}
-                changeSession={changeSession}
-                createSession={createSession}
-                deleteAttempt={deleteAttempt}
-                changeEvent={changeEvent}
+                session={session}
                 scramble={scramble}
                 touchArea={touchArea}
                 state={state}
@@ -98,19 +78,7 @@ function App() {
             )
           }
         />
-        <Route
-          path="/results"
-          element={
-            <MobileResults
-              attempts={attempts}
-              currentSession={currentSession}
-              sessions={sessions}
-              changeSession={changeSession}
-              createSession={createSession}
-              deleteAttempt={deleteAttempt}
-            />
-          }
-        />
+        <Route path="/results" element={<MobileResults session={session} />} />
       </Routes>
     </Router>
   );

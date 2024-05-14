@@ -1,37 +1,21 @@
-import { AttemptData } from "./lib/attempt-data";
+import { Button } from "@nextui-org/button";
+import { X } from "lucide-react";
 import { timeParts } from "./lib/stats";
+import { SessionType } from "./lib/useSession";
 import { cn } from "./lib/utils";
 import SessionSwitch from "./session-switch";
-import { Session } from "./lib/useSession";
-import { X } from "lucide-react";
-import { Button } from "@nextui-org/button";
 
 function Stats({
   className,
-  attempts,
-  currentSession,
-  sessions,
-  changeSession,
-  createSession,
-  deleteAttempt,
+  session,
 }: {
   className?: string;
-  attempts: AttemptData[];
-  currentSession: Session | undefined;
-  sessions: Session[];
-  changeSession: (name: string) => void;
-  createSession: (name: string) => void;
-  deleteAttempt: (id: string) => void;
+  session: SessionType;
 }) {
   return (
     <div className={cn(className, "max-h-lvh overflow-y-scroll")}>
-      <SessionSwitch
-        sessions={sessions}
-        currentSession={currentSession}
-        changeSession={changeSession}
-        createSession={createSession}
-      />
-      {attempts.toReversed().map((row) => {
+      <SessionSwitch session={session} />
+      {session.attempts.toReversed().map((row) => {
         const { _id, totalResultMs } = row;
         const { secRest, decimals } = timeParts(totalResultMs);
         return (
@@ -45,7 +29,7 @@ function Stats({
             <Button
               isIconOnly
               variant="light"
-              onClick={() => deleteAttempt(_id)}
+              onClick={() => session.deleteAttempt(_id)}
             >
               <X />
             </Button>

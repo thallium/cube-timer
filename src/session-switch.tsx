@@ -1,29 +1,20 @@
+import { Button } from "@nextui-org/button";
 import {
   Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
   DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
 } from "@nextui-org/dropdown";
-import { Button } from "@nextui-org/button";
-import { Session } from "./lib/useSession";
-import { Plus } from "lucide-react";
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
 import { Input } from "@nextui-org/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
+import { Plus } from "lucide-react";
 import { useState } from "react";
+import { SessionType } from "./lib/useSession";
 
-function SessionSwitch({
-  currentSession,
-  sessions,
-  changeSession,
-  createSession,
-}: {
-  currentSession: Session | undefined;
-  sessions: Session[];
-  changeSession: (name: string) => void;
-  createSession: (name: string) => void;
-}) {
+function SessionSwitch({ session }: { session: SessionType }) {
   const [newSessionName, setNewSessionName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const { currentSession, createSession, changeSession, sessions } = session;
 
   return (
     <div className="flex justify-center">
