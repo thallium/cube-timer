@@ -23,7 +23,7 @@ function ScrambleDisplay({
   const playerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const twistyPlayer = new TwistyPlayer({
-      alg: scramble,
+      alg: scramble || "",
       controlPanel: "none",
       visualization: "2D",
       background: "none",

@@ -7,6 +7,7 @@ import ScrambleBar from "./scramble-bar";
 import ScrambleDisplay from "./scramble-display";
 import Timer from "./timer";
 import { State } from "./timing/useController";
+import { ViewType } from "./types/view";
 
 function MobileView({
   session,
@@ -14,15 +15,17 @@ function MobileView({
   touchArea,
   state,
   time,
+  setView,
 }: {
   session: SessionType;
   scramble: Alg | undefined;
   touchArea: React.RefObject<HTMLDivElement>;
   state: State;
   time: number;
+  setView: (view: ViewType) => void;
 }) {
   return (
-    <MobileLayout>
+    <MobileLayout setView={setView}>
       <div>
         <EventSwitch session={session} />
         <ScrambleBar scramble={scramble?.toString()} />

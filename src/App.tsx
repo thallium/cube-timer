@@ -2,7 +2,6 @@
 import { Alg } from "cubing/alg";
 import { randomScrambleForEvent } from "cubing/scramble";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { useMedia } from "use-media";
 import "./App.css";
 import DeskTopView from "./desktop-view";
@@ -12,12 +11,16 @@ import MobileResults from "./mobile-results";
 import MobileView from "./mobile-view";
 import useController from "./timing/useController";
 import useTimer from "./timing/useTimer";
+import { ViewType } from "./types/view";
 
 async function genScramble(event: EventID) {
   return randomScrambleForEvent(event);
 }
 
 function App() {
+  const isWide = useMedia({ minWidth: "640px" });
+  const [view, setView] = useState<ViewType>("timer");
+
   const { time, start, stop, reset } = useTimer();
   const [scramble, setScramble] = useState<Alg>();
   const session = useSession();
@@ -42,7 +45,7 @@ function App() {
     resetTimer: reset,
     solveDoneCallback: solveDone,
     newAttemptCallback: newAttempt,
-    touchArea: touchArea.current!,
+    touchArea: touchArea.current,
   });
 
   useEffect(() => {
@@ -51,37 +54,30 @@ function App() {
     });
   }, [session.currentSession]);
 
-  const isWide = useMedia({ minWidth: "640px" });
-
-  return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            isWide ? (
-              <DeskTopView
-                session={session}
-                scramble={scramble}
-                touchArea={touchArea}
-                state={state}
-                time={time}
-              />
-            ) : (
-              <MobileView
-                session={session}
-                scramble={scramble}
-                touchArea={touchArea}
-                state={state}
-                time={time}
-              />
-            )
-          }
-        />
-        <Route path="/results" element={<MobileResults session={session} />} />
-      </Routes>
-    </Router>
-  );
+  if (view === "timer") {
+    return isWide ? (
+      <DeskTopView
+        session={session}
+        scramble={scramble}
+        touchArea={touchArea}
+        state={state}
+        time={time}
+      />
+    ) : (
+      <MobileView
+        session={session}
+        scramble={scramble}
+        touchArea={touchArea}
+        state={state}
+        time={time}
+        setView={setView}
+      />
+    );
+  } else if (view === "results") {
+    return <MobileResults setView={setView} session={session} />;
+  } else {
+    return <></>;
+  }
 }
 
 export default App;

@@ -32,7 +32,7 @@ const useController = ({
   resetTimer: () => void;
   solveDoneCallback: (time: number) => void;
   newAttemptCallback: () => void;
-  touchArea: HTMLElement;
+  touchArea: HTMLElement | null;
 }) => {
   const [state, setState] = useState(State.Done);
 
@@ -59,8 +59,10 @@ const useController = ({
       }
       return nextState;
     },
-    [startTimer, stopTimer, resetTimer, solveDoneCallback, newAttemptCallback]
+    [startTimer, stopTimer, resetTimer, solveDoneCallback, newAttemptCallback],
   );
+
+  // console.log(touchArea);
   useEffect(() => {
     const keyDown = (e: KeyboardEvent) => {
       if (isTimerKey(e)) {
@@ -91,6 +93,7 @@ const useController = ({
       window.removeEventListener("keydown", keyDown);
       window.removeEventListener("keyup", keyUp);
 
+      // console.log("dismounted");
       touchArea?.removeEventListener("touchstart", down);
       touchArea?.removeEventListener("touchend", up);
     };
