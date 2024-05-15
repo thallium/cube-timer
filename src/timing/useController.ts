@@ -25,14 +25,12 @@ const useController = ({
   resetTimer,
   solveDoneCallback,
   newAttemptCallback,
-  touchArea,
 }: {
   startTimer: () => void;
   stopTimer: () => number;
   resetTimer: () => void;
   solveDoneCallback: (time: number) => void;
   newAttemptCallback: () => void;
-  touchArea: HTMLElement | null;
 }) => {
   const [state, setState] = useState(State.Done);
 
@@ -62,7 +60,14 @@ const useController = ({
     [startTimer, stopTimer, resetTimer, solveDoneCallback, newAttemptCallback],
   );
 
-  // console.log(touchArea);
+  const down = () => {
+    setState((state) => transit(state, 0));
+  };
+
+  const up = () => {
+    setState((state) => transit(state, 1));
+  };
+
   useEffect(() => {
     const keyDown = (e: KeyboardEvent) => {
       if (isTimerKey(e)) {
@@ -76,30 +81,17 @@ const useController = ({
         setState((state) => transit(state, 1));
       }
     };
-    const down = () => {
-      setState((state) => transit(state, 0));
-    };
-    const up = () => {
-      setState((state) => transit(state, 1));
-    };
 
     window.addEventListener("keydown", keyDown);
     window.addEventListener("keyup", keyUp);
 
-    touchArea?.addEventListener("touchstart", down);
-    touchArea?.addEventListener("touchend", up);
-
     return () => {
       window.removeEventListener("keydown", keyDown);
       window.removeEventListener("keyup", keyUp);
-
-      // console.log("dismounted");
-      touchArea?.removeEventListener("touchstart", down);
-      touchArea?.removeEventListener("touchend", up);
     };
-  }, [transit, touchArea]);
+  }, [transit]);
 
-  return { state };
+  return { state, down, up };
 };
 
 export default useController;

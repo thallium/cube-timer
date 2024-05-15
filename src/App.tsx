@@ -39,13 +39,12 @@ function App() {
   }, [session.currentSession]);
 
   const touchArea = useRef<HTMLDivElement>(null);
-  const { state } = useController({
+  const { state, down, up } = useController({
     startTimer: start,
     stopTimer: stop,
     resetTimer: reset,
     solveDoneCallback: solveDone,
     newAttemptCallback: newAttempt,
-    touchArea: touchArea.current,
   });
 
   useEffect(() => {
@@ -53,6 +52,15 @@ function App() {
       setScramble(scramble);
     });
   }, [session.currentSession]);
+
+  useEffect(() => {
+    touchArea.current?.addEventListener("touchstart", down);
+    touchArea.current?.addEventListener("touchend", up);
+    return () => {
+      touchArea.current?.removeEventListener("touchstart", down);
+      touchArea.current?.removeEventListener("touchend", up);
+    };
+  }, [touchArea.current]);
 
   if (view === "timer") {
     return isWide ? (
