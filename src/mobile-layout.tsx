@@ -13,7 +13,12 @@ function MobileLayout({
   setView: (setView: ViewType) => void;
 }) {
   return (
-    <div className={cn("flex h-dvh select-none flex-col pt-4", className)}>
+    <div
+      className={cn(
+        "flex h-dvh select-none flex-col justify-between pt-4",
+        className,
+      )}
+    >
       {children}
       <BottomBar setView={setView} />
     </div>

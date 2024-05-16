@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/button";
-import { List, Timer } from "lucide-react";
+import { List, Settings, Timer } from "lucide-react";
 import { ViewType } from "./types/view";
 
 function BottomBar({ setView }: { setView: (view: ViewType) => void }) {
@@ -10,6 +10,9 @@ function BottomBar({ setView }: { setView: (view: ViewType) => void }) {
       </Button>
       <Button isIconOnly variant="light" onClick={() => setView("results")}>
         <List size={32} />
+      </Button>
+      <Button isIconOnly variant="light" onClick={() => setView("settings")}>
+        <Settings size={32} />
       </Button>
     </div>
   );

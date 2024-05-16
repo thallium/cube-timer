@@ -1,1 +1,1 @@
-export type ViewType = "timer" | "results";
+export type ViewType = "timer" | "results" | "settings";

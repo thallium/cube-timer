@@ -8,8 +8,10 @@ import "./App.css";
 import DeskTopView from "./desktop-view";
 import { EventID } from "./lib/events";
 import { useSession } from "./lib/useSession";
+import MobileLayout from "./mobile-layout";
 import MobileResults from "./mobile-results";
 import MobileView from "./mobile-view";
+import Settings from "./settings";
 import useController from "./timing/useController";
 import useTimer from "./timing/useTimer";
 import { ViewType } from "./types/view";
@@ -74,6 +76,12 @@ function App() {
     );
   } else if (view === "results") {
     return <MobileResults setView={setView} session={session} />;
+  } else if (view === "settings") {
+    return (
+      <MobileLayout setView={setView}>
+        <Settings />
+      </MobileLayout>
+    );
   } else {
     return <></>;
   }
