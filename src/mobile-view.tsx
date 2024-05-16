@@ -46,12 +46,10 @@ function MobileView({
       <div className="flex grow flex-col px-2" ref={touchArea}>
         <Timer state={state} time={time} className="grow" />
         <div className="flex flex-row items-end justify-between">
-          <Stats session={session} className="p-2" />
+          <Stats session={session} className="p-2" textSize="text-lg" />
           <ScrambleDisplay
             scramble={scramble}
             event={session.currentSession?.event ?? "333"}
-            width="19rem"
-            // height="18rem"
           />
         </div>
       </div>

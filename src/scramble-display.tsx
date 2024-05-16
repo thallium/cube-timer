@@ -16,13 +16,9 @@ const eventToPuzzle = {
 function ScrambleDisplay({
   scramble,
   event,
-  width,
-  height,
 }: {
   scramble: Alg | undefined;
   event: EventID;
-  width?: string;
-  height?: string;
 }) {
   const playerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -33,19 +29,15 @@ function ScrambleDisplay({
       background: "none",
       puzzle: eventToPuzzle[event],
     });
-    twistyPlayer.style.maxWidth = width || "none";
-    twistyPlayer.style.maxHeight = height || "none";
+    twistyPlayer.style.width = "100%";
 
     while (playerRef.current?.firstChild) {
       playerRef.current.removeChild(playerRef.current.firstChild);
     }
     playerRef.current?.appendChild(twistyPlayer);
   }, [scramble, event]);
-  return (
-    <div className="flex justify-center">
-      <div ref={playerRef}></div>
-    </div>
-  );
+
+  return <div ref={playerRef} className="flex grow justify-center"></div>;
 }
 
 export default ScrambleDisplay;
