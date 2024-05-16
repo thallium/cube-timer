@@ -5,7 +5,6 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown";
-import { Input } from "@nextui-org/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
 import { Plus } from "lucide-react";
 import { useState } from "react";
@@ -38,6 +37,7 @@ function SessionSwitch({ session }: { session: SessionType }) {
               className={
                 session._id === currentSession?._id ? "text-primary" : ""
               }
+              textValue={session._id}
             >
               <div className="text-center text-2xl">{session._id}</div>
             </DropdownItem>
@@ -57,13 +57,19 @@ function SessionSwitch({ session }: { session: SessionType }) {
         </PopoverTrigger>
         <PopoverContent className="shadow-lg">
           <div className="flex items-center justify-center p-2">
-            <Input
+            <input
+              value={newSessionName}
+              onChange={(e) => setNewSessionName(e.target.value)}
+              className=" rounded-md border border-foreground px-2 py-2 text-xl"
+            />
+            {/* <Input
               variant="bordered"
-              size="md"
+              size="lg"
               type="text"
               value={newSessionName}
               onValueChange={setNewSessionName}
-            />
+              className=" text-2xl"
+            /> */}
             <Button
               variant="light"
               onClick={() => {
