@@ -1,3 +1,4 @@
+import { cn } from "@nextui-org/system";
 import { Alg } from "cubing/alg";
 import "cubing/twisty";
 import { TwistyPlayer } from "cubing/twisty";
@@ -16,9 +17,11 @@ const eventToPuzzle = {
 function ScrambleDisplay({
   scramble,
   event,
+  className,
 }: {
   scramble: Alg | undefined;
   event: EventID;
+  className?: string;
 }) {
   const playerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -37,7 +40,12 @@ function ScrambleDisplay({
     playerRef.current?.appendChild(twistyPlayer);
   }, [scramble, event]);
 
-  return <div ref={playerRef} className="flex grow justify-center"></div>;
+  return (
+    <div
+      ref={playerRef}
+      className={cn(className, "flex grow flex-col justify-end")}
+    ></div>
+  );
 }
 
 export default ScrambleDisplay;

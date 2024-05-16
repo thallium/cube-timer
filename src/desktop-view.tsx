@@ -32,11 +32,12 @@ function DeskTopView({
           <EventSwitch session={session} />
           <ScrambleBar scramble={scramble?.toString()} />
         </div>
-        <div className="flex grow flex-col">
+        <div className="flex grow flex-col justify-between">
           <Timer state={state} time={time} className=" grow" />
           <ScrambleDisplay
             scramble={scramble}
             event={session.currentSession?.event ?? "333"}
+            className=" grow-0"
           />
         </div>
       </div>
