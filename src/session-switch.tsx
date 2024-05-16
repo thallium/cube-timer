@@ -60,16 +60,8 @@ function SessionSwitch({ session }: { session: SessionType }) {
             <input
               value={newSessionName}
               onChange={(e) => setNewSessionName(e.target.value)}
-              className=" rounded-md border border-foreground px-2 py-2 text-xl"
+              className="h-10 w-32 rounded-md px-2 text-xl outline outline-2 outline-default-400"
             />
-            {/* <Input
-              variant="bordered"
-              size="lg"
-              type="text"
-              value={newSessionName}
-              onValueChange={setNewSessionName}
-              className=" text-2xl"
-            /> */}
             <Button
               variant="light"
               onClick={() => {

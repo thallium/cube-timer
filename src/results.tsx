@@ -28,6 +28,7 @@ function Results({
               isIconOnly
               variant="light"
               onClick={() => session.deleteAttempt(_id)}
+              className=" text-default-400"
             >
               <X />
             </Button>
