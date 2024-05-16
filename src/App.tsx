@@ -3,6 +3,7 @@ import { Alg } from "cubing/alg";
 import { randomScrambleForEvent } from "cubing/scramble";
 import { useCallback, useEffect, useState } from "react";
 import { useMedia } from "use-media";
+import { registerSW } from "virtual:pwa-register";
 import "./App.css";
 import DeskTopView from "./desktop-view";
 import { EventID } from "./lib/events";
@@ -12,6 +13,8 @@ import MobileView from "./mobile-view";
 import useController from "./timing/useController";
 import useTimer from "./timing/useTimer";
 import { ViewType } from "./types/view";
+
+registerSW({ immediate: true });
 
 async function genScramble(event: EventID) {
   return randomScrambleForEvent(event);
