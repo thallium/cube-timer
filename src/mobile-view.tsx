@@ -1,29 +1,41 @@
 import { Alg } from "cubing/alg";
-import React from "react";
+import { useEffect, useRef } from "react";
 import EventSwitch from "./event-switch";
 import { SessionType } from "./lib/useSession";
 import MobileLayout from "./mobile-layout";
 import ScrambleBar from "./scramble-bar";
 import ScrambleDisplay from "./scramble-display";
 import Timer from "./timer";
-import { State } from "./timing/useController";
+import { ControllerType } from "./timing/useController";
 import { ViewType } from "./types/view";
 
 function MobileView({
   session,
   scramble,
-  touchArea,
-  state,
   time,
   setView,
+  controller,
 }: {
   session: SessionType;
   scramble: Alg | undefined;
-  touchArea: React.RefObject<HTMLDivElement>;
-  state: State;
+  controller: ControllerType;
   time: number;
   setView: (view: ViewType) => void;
 }) {
+  const { state, up, down } = controller;
+  const touchArea = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const touchAreaTmp = touchArea.current;
+    touchAreaTmp?.addEventListener("touchstart", down);
+    touchAreaTmp?.addEventListener("touchend", up);
+
+    return () => {
+      touchAreaTmp?.removeEventListener("touchstart", down);
+      touchAreaTmp?.removeEventListener("touchend", up);
+    };
+  }, [touchArea.current]);
+
   return (
     <MobileLayout setView={setView} className="touch-none">
       <div>

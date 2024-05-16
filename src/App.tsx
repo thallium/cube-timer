@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Alg } from "cubing/alg";
 import { randomScrambleForEvent } from "cubing/scramble";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useMedia } from "use-media";
 import "./App.css";
 import DeskTopView from "./desktop-view";
@@ -38,8 +38,7 @@ function App() {
     });
   }, [session.currentSession]);
 
-  const touchArea = useRef<HTMLDivElement>(null);
-  const { state, down, up } = useController({
+  const controller = useController({
     startTimer: start,
     stopTimer: stop,
     resetTimer: reset,
@@ -53,30 +52,19 @@ function App() {
     });
   }, [session.currentSession]);
 
-  useEffect(() => {
-    touchArea.current?.addEventListener("touchstart", down);
-    touchArea.current?.addEventListener("touchend", up);
-    return () => {
-      touchArea.current?.removeEventListener("touchstart", down);
-      touchArea.current?.removeEventListener("touchend", up);
-    };
-  }, [touchArea.current]);
-
   if (view === "timer") {
     return isWide ? (
       <DeskTopView
         session={session}
         scramble={scramble}
-        touchArea={touchArea}
-        state={state}
+        state={controller.state}
         time={time}
       />
     ) : (
       <MobileView
         session={session}
         scramble={scramble}
-        touchArea={touchArea}
-        state={state}
+        controller={controller}
         time={time}
         setView={setView}
       />

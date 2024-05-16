@@ -1,5 +1,4 @@
 import { Alg } from "cubing/alg";
-import React from "react";
 import EventSwitch from "./event-switch";
 import { SessionType } from "./lib/useSession";
 import Results from "./results";
@@ -12,13 +11,11 @@ import { State } from "./timing/useController";
 function DeskTopView({
   session,
   scramble,
-  touchArea,
   state,
   time,
 }: {
   session: SessionType;
   scramble: Alg | undefined;
-  touchArea: React.RefObject<HTMLDivElement>;
   state: State;
   time: number;
 }) {
@@ -33,7 +30,7 @@ function DeskTopView({
           <EventSwitch session={session} />
           <ScrambleBar scramble={scramble?.toString()} />
         </div>
-        <div className="flex grow flex-col" ref={touchArea}>
+        <div className="flex grow flex-col">
           <Timer state={state} time={time} className=" grow" />
           <ScrambleDisplay
             scramble={scramble}

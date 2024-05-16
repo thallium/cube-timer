@@ -94,4 +94,6 @@ const useController = ({
   return { state, down, up };
 };
 
+export type ControllerType = ReturnType<typeof useController>;
+
 export default useController;
