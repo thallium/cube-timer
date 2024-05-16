@@ -1,6 +1,6 @@
 import { Button } from "@nextui-org/button";
 import { X } from "lucide-react";
-import { timeParts } from "./lib/stats";
+import FormattedTime from "./components/FormattedTime";
 import { SessionType } from "./lib/useSession";
 import { cn } from "./lib/utils";
 
@@ -15,15 +15,12 @@ function Results({
     <div className={cn(className, "overflow-y-scroll")}>
       {session.attempts.toReversed().map((row) => {
         const { _id, totalResultMs } = row;
-        const { secRest, decimals } = timeParts(totalResultMs);
         return (
           <div
             key={_id}
             className="my-2 flex flex-row items-center justify-center"
           >
-            <div className="text-center text-2xl">
-              {`${secRest}.${decimals}`}
-            </div>
+            <FormattedTime time={totalResultMs} />
             <Button
               isIconOnly
               variant="light"

@@ -16,7 +16,7 @@ function SessionSwitch({ session }: { session: SessionType }) {
   const { currentSession, createSession, changeSession, sessions } = session;
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center pb-2">
       <Dropdown className="shadow-lg">
         <DropdownTrigger>
           <Button variant="bordered" className="text-2xl">

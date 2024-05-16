@@ -1,3 +1,5 @@
+import { AttemptData } from "./attempt-data";
+
 type TimeParts = {
   secFirst: string;
   secRest: string;
@@ -38,5 +40,24 @@ export function timeParts(time: number): TimeParts {
     secFirst: secFirstString,
     secRest: secRestString,
     decimals: `${pad(centiseconds, 2)}`,
+  };
+}
+
+export function getStats(attempts: AttemptData[]) {
+  const times = attempts.map((a) => a.totalResultMs);
+  const sumArr = (sum: number, cur: number) => sum + cur;
+  const ao5 =
+    attempts.length >= 5
+      ? times.slice(-5).toSorted().slice(1, -1).reduce(sumArr, 0) / 3
+      : NaN;
+  const ao12 =
+    attempts.length >= 12
+      ? times.slice(-12).toSorted().slice(1, -1).reduce(sumArr, 0) / 10
+      : NaN;
+  const best = Math.min(...times);
+  return {
+    ao5,
+    ao12,
+    best,
   };
 }
