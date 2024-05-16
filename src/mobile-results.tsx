@@ -15,7 +15,7 @@ function MobileResults({
   return (
     <MobileLayout setView={setView}>
       <SessionSwitch session={session} />
-      <Results session={session} className="grow" />
+      <Results session={session} className="grow px-4" />
     </MobileLayout>
   );
 }

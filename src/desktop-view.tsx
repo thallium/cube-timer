@@ -22,10 +22,10 @@ function DeskTopView({
 }) {
   return (
     <div className="grid h-dvh select-none grid-cols-[1fr_3fr]">
-      <div className="flex h-dvh flex-col divide-y-2 bg-default-100 py-4">
+      <div className="flex h-dvh flex-col divide-y-2 bg-default-100 px-2 py-4">
         <SessionSwitch session={session} />
-        <Stats session={session} className="p-4" />
-        <Results session={session} />
+        <Stats session={session} className="py-4" />
+        <Results session={session} className="pt-4" />
       </div>
       <div className="flex h-dvh touch-none flex-col py-4">
         <div>
