@@ -1,22 +1,21 @@
+import { Button } from "@nextui-org/button";
 import { useRegisterSW } from "virtual:pwa-register/react";
 
 function Settings() {
   const {
     offlineReady: [offlineReady],
-    needRefresh: [needRefresh],
+    // needRefresh: [needRefresh],
     updateServiceWorker,
   } = useRegisterSW({});
   return (
-    <div className="px-2 text-2xl">
+    <div className="space-y-2 px-2 text-2xl">
       <div>Offline Ready: {offlineReady ? "Yes" : "No"}</div>
-      {needRefresh && (
-        <button
-          className="ReloadPrompt-toast-button"
-          onClick={() => updateServiceWorker(true)}
-        >
-          Reload
-        </button>
-      )}
+      <Button
+        className="ReloadPrompt-toast-button"
+        onClick={() => updateServiceWorker(true)}
+      >
+        Reload
+      </Button>
     </div>
   );
 }
