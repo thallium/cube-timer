@@ -3,9 +3,8 @@ import { X } from "lucide-react";
 import { timeParts } from "./lib/stats";
 import { SessionType } from "./lib/useSession";
 import { cn } from "./lib/utils";
-import SessionSwitch from "./session-switch";
 
-function Stats({
+function Results({
   className,
   session,
 }: {
@@ -13,8 +12,7 @@ function Stats({
   session: SessionType;
 }) {
   return (
-    <div className={cn(className, "max-h-lvh overflow-y-scroll")}>
-      <SessionSwitch session={session} />
+    <div className={cn(className, "overflow-y-scroll")}>
       {session.attempts.toReversed().map((row) => {
         const { _id, totalResultMs } = row;
         const { secRest, decimals } = timeParts(totalResultMs);
@@ -40,4 +38,4 @@ function Stats({
   );
 }
 
-export default Stats;
+export default Results;

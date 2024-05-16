@@ -25,13 +25,13 @@ function MobileView({
   setView: (view: ViewType) => void;
 }) {
   return (
-    <MobileLayout setView={setView}>
+    <MobileLayout setView={setView} className="touch-none">
       <div>
         <EventSwitch session={session} />
         <ScrambleBar scramble={scramble?.toString()} />
       </div>
       <div className="flex grow flex-col" ref={touchArea}>
-        <Timer state={state} time={time} className=" grow" />
+        <Timer state={state} time={time} className="grow" />
         <ScrambleDisplay
           scramble={scramble}
           event={session.currentSession?.event ?? "333"}

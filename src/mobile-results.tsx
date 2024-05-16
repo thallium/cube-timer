@@ -1,6 +1,7 @@
 import { SessionType } from "./lib/useSession";
 import MobileLayout from "./mobile-layout";
-import Stats from "./results";
+import Results from "./results";
+import SessionSwitch from "./session-switch";
 import { ViewType } from "./types/view";
 
 function MobileResults({
@@ -13,7 +14,8 @@ function MobileResults({
 }) {
   return (
     <MobileLayout setView={setView}>
-      <Stats session={session} className="grow" />
+      <SessionSwitch session={session} />
+      <Results session={session} className="grow" />
     </MobileLayout>
   );
 }
