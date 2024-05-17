@@ -79,7 +79,7 @@ function App() {
   } else if (view === "settings") {
     return (
       <MobileLayout setView={setView}>
-        <Settings />
+        <Settings session={session} />
       </MobileLayout>
     );
   } else {

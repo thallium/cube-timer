@@ -2,8 +2,9 @@ import { Button } from "@nextui-org/button";
 import PouchDb from "pouchdb-browser";
 import { useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
+import { SessionType } from "./lib/useSession";
 
-function Settings() {
+function Settings({ session }: { session: SessionType }) {
   const {
     offlineReady: [offlineReady],
     // needRefresh: [needRefresh],
@@ -29,7 +30,10 @@ function Settings() {
         <Button
           className="inline-block text-2xl"
           onClick={() => {
-            PouchDb.sync("sessions", "http://admin:password@arm:5900/sessions");
+            PouchDb.sync("sessions", remoteDB + "/sessions").then((res) => {
+              console.log(res);
+              session.loadFromDB();
+            });
           }}
         >
           Sync

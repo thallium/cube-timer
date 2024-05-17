@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { EventID } from "./events";
-import { AttemptData } from "./attempt-data";
-import PouchDB from "pouchdb-browser";
 import { Alg } from "cubing/alg";
+import PouchDB from "pouchdb-browser";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AttemptData } from "./attempt-data";
+import { EventID } from "./events";
 
 export type Session = {
   _id: string; // id is the name of the group
@@ -121,6 +121,13 @@ export function useSession() {
     [db, session],
   );
 
+  const loadFromDB = useCallback(() => {
+    db.current.allDocs({ include_docs: true }).then((res) => {
+      setSessions(res.rows.map((row) => row.doc as unknown as Session));
+      setAttemptsFromDB();
+    });
+  }, [db, setAttemptsFromDB]);
+
   return {
     currentSession: session,
     sessions: sessions,
@@ -130,6 +137,7 @@ export function useSession() {
     deleteAttempt,
     attempts,
     changeEvent,
+    loadFromDB,
   };
 }
 
