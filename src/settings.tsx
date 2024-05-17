@@ -8,14 +8,23 @@ function Settings() {
     updateServiceWorker,
   } = useRegisterSW({});
   return (
-    <div className="space-y-2 px-2 text-2xl">
+    <div className="space-y-2 divide-y-2 px-4 text-2xl">
       <div>Offline Ready: {offlineReady ? "Yes" : "No"}</div>
-      <Button
-        className="ReloadPrompt-toast-button"
-        onClick={() => updateServiceWorker(true)}
-      >
-        Reload
-      </Button>
+      <div>
+        <Button
+          className="ReloadPrompt-toast-button text-2xl"
+          onClick={() => updateServiceWorker(true)}
+        >
+          Reload
+        </Button>
+      </div>
+      <div>
+        Remote DB:{" "}
+        <input
+          type="text"
+          className="rounded-md outline outline-2 outline-default-400"
+        />
+      </div>
     </div>
   );
 }
