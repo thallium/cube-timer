@@ -16,3 +16,7 @@ export function useSettings(): {
     ],
   };
 }
+
+export function readSetting(name: string) {
+  return localStorage.getItem(name);
+}

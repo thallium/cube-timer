@@ -3,6 +3,7 @@ import PouchDB from "pouchdb-browser";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AttemptData } from "./attempt-data";
 import { EventID } from "./events";
+import { readSetting } from "./settings";
 
 export type Session = {
   _id: string; // id is the name of the group
@@ -12,6 +13,23 @@ export type Session = {
 export function useSession() {
   const db = useRef(new PouchDB("sessions"));
   const [sessions, setSessions] = useState<Session[]>([]);
+  const sync = useRef<PouchDB.Replication.Sync<object>>();
+
+  const startSync = (name: string) => {
+    if (sync.current) {
+      sync.current.cancel();
+    }
+
+    sync.current = PouchDB.sync(
+      "session_" + name,
+      readSetting("remoteDB") + "/session_" + name,
+      {
+        live: true,
+        retry: true,
+      },
+    );
+  };
+
   useEffect(() => {
     const init = async () => {
       let res = await db.current.allDocs();
@@ -32,6 +50,7 @@ export function useSession() {
   const attemptDB = useRef<PouchDB.Database>(new PouchDB("session_default"));
 
   if (!session && sessions.length > 0) {
+    startSync(sessions[0]._id);
     setSession(sessions[0]);
     attemptDB.current = new PouchDB("session_" + sessions[0]._id);
     attemptDB.current.allDocs({ include_docs: true }).then((res) => {
@@ -41,6 +60,7 @@ export function useSession() {
 
   const changeSession = useCallback(
     (name: string) => {
+      startSync(name);
       db.current.get(name).then((res) => {
         setSession(res as unknown as Session);
       });

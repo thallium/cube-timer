@@ -2,8 +2,8 @@ import { Button } from "@nextui-org/button";
 import PouchDb from "pouchdb-browser";
 import { useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
+import { useSettings } from "./lib/settings";
 import { SessionType } from "./lib/useSession";
-import { useSettings } from "./lib/useSettings";
 
 function Settings({ session }: { session: SessionType }) {
   const {
