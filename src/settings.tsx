@@ -6,10 +6,10 @@ import { SessionType } from "./lib/useSession";
 
 function Settings({
   session,
-  updateServiceWorker,
+  //   updateServiceWorker,
 }: {
   session: SessionType;
-  updateServiceWorker: (reloadPage?: boolean | undefined) => Promise<void>;
+  //   updateServiceWorker: (reloadPage?: boolean | undefined) => Promise<void>;
 }) {
   //   const [remoteDB, setRemoteDB] = useState("");
   const {
@@ -18,14 +18,14 @@ function Settings({
   const [syncMessage, setSyncMessage] = useState("");
   return (
     <div className="space-y-2 divide-y-2 px-4 text-lg sm:text-2xl">
-      <div>
+      {/* <div>
         <Button
           className="text-lg sm:text-2xl"
           onClick={() => updateServiceWorker(true)}
         >
           Reload
         </Button>
-      </div>
+      </div> */}
       <div>
         Remote DB:{" "}
         <input

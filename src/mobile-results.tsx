@@ -13,7 +13,7 @@ function MobileResults({
   setView: (view: ViewType) => void;
 }) {
   return (
-    <MobileLayout setView={setView}>
+    <MobileLayout setView={setView} className=" touch-none">
       <SessionSwitch session={session} />
       <Results session={session} className="grow px-4" />
     </MobileLayout>

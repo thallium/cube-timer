@@ -3,7 +3,7 @@ import { Alg } from "cubing/alg";
 import { randomScrambleForEvent } from "cubing/scramble";
 import { useCallback, useEffect, useState } from "react";
 import { useMedia } from "use-media";
-import { useRegisterSW } from "virtual:pwa-register/react";
+// import { useRegisterSW } from "virtual:pwa-register/react";
 import "./App.css";
 import DeskTopView from "./desktop-view";
 import { EventID } from "./lib/events";
@@ -20,12 +20,15 @@ async function genScramble(event: EventID) {
   return randomScrambleForEvent(event);
 }
 
+import { registerSW } from "virtual:pwa-register";
+
+registerSW({ immediate: true });
 function App() {
-  const {
-    // offlineReady: [offlineReady],
-    // needRefresh: [needRefresh],
-    updateServiceWorker,
-  } = useRegisterSW({});
+  // const {
+  //   // offlineReady: [offlineReady],
+  //   // needRefresh: [needRefresh],
+  //   updateServiceWorker,
+  // } = useRegisterSW({});
   const isWide = useMedia({ minWidth: "640px" });
   const [view, setView] = useState<ViewType>("timer");
 
@@ -82,7 +85,7 @@ function App() {
   } else if (view === "settings") {
     return (
       <MobileLayout setView={setView}>
-        <Settings session={session} updateServiceWorker={updateServiceWorker} />
+        <Settings session={session} />
       </MobileLayout>
     );
   } else {
