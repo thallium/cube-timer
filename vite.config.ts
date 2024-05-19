@@ -36,6 +36,9 @@ export default defineConfig({
           },
         ],
       },
+      workbox: {
+        sourcemap: true,
+      },
     }),
   ],
   define: { global: "window" },

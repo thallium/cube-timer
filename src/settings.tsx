@@ -1,16 +1,16 @@
 import { Button } from "@nextui-org/button";
 import PouchDb from "pouchdb-browser";
 import { useState } from "react";
-import { useRegisterSW } from "virtual:pwa-register/react";
 import { useSettings } from "./lib/settings";
 import { SessionType } from "./lib/useSession";
 
-function Settings({ session }: { session: SessionType }) {
-  const {
-    offlineReady: [offlineReady],
-    // needRefresh: [needRefresh],
-    updateServiceWorker,
-  } = useRegisterSW({});
+function Settings({
+  session,
+  updateServiceWorker,
+}: {
+  session: SessionType;
+  updateServiceWorker: (reloadPage?: boolean | undefined) => Promise<void>;
+}) {
   //   const [remoteDB, setRemoteDB] = useState("");
   const {
     remoteDB: [remoteDB, setRemoteDB],
@@ -18,7 +18,6 @@ function Settings({ session }: { session: SessionType }) {
   const [syncMessage, setSyncMessage] = useState("");
   return (
     <div className="space-y-2 divide-y-2 px-4 text-lg sm:text-2xl">
-      <div>Offline Ready: {offlineReady ? "Yes" : "No"}</div>
       <div>
         <Button
           className="text-lg sm:text-2xl"
