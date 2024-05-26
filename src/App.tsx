@@ -58,6 +58,7 @@ function App() {
   });
 
   useEffect(() => {
+    setScramble(undefined);
     genScramble(session.currentSession?.event ?? "333").then((scramble) => {
       setScramble(scramble);
     });
