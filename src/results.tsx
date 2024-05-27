@@ -1,4 +1,12 @@
 import { Button } from "@nextui-org/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@nextui-org/table";
 import { X } from "lucide-react";
 import FormattedTime from "./components/FormattedTime";
 import { SessionType } from "./lib/useSession";
@@ -16,20 +24,25 @@ function Results({
       className={cn(className, "flex flex-col justify-start overflow-hidden")}
     >
       <div className="no-scrollbar overflow-y-scroll">
-        <table className="table-auto">
-          <tbody>
+        <Table hideHeader>
+          <TableHeader>
+            <TableColumn>Number</TableColumn>
+            <TableColumn>Time</TableColumn>
+            <TableColumn>Action</TableColumn>
+          </TableHeader>
+          <TableBody>
             {session.attempts
               .map((row, index) => {
                 const { _id, totalResultMs } = row;
                 return (
-                  <tr key={_id} className="my-2 border-y">
-                    <th className="w-1/12 text-2xl font-normal text-default-500">
+                  <TableRow key={_id} className="border-y">
+                    <TableCell className="w-1/12 text-2xl text-default-500">
                       {index + 1}
-                    </th>
-                    <th className="font-normal">
+                    </TableCell>
+                    <TableCell>
                       <FormattedTime time={totalResultMs} />
-                    </th>
-                    <th className="w-1/12">
+                    </TableCell>
+                    <TableCell className="w-1/12">
                       <Button
                         isIconOnly
                         variant="light"
@@ -38,13 +51,13 @@ function Results({
                       >
                         <X />
                       </Button>
-                    </th>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 );
               })
               .toReversed()}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
