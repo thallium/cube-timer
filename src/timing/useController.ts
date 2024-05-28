@@ -1,18 +1,21 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export enum State {
   HandOnTimer,
   Running,
   Stopped,
   Done,
+  Ready,
   Ignore,
 }
 
 const transition: readonly State[][] = [
-  [State.Ignore, State.Running],
-  [State.Stopped, State.Running],
+  [State.Ignore, State.Done],
+  [State.Stopped, State.Ignore],
   [State.Ignore, State.Done],
   [State.HandOnTimer, State.Done],
+  [State.Ignore, State.Running],
+  [State.Ignore, State.Ignore],
 ];
 
 function isTimerKey(e: KeyboardEvent): boolean {
@@ -33,12 +36,24 @@ const useController = ({
   newAttemptCallback: () => void;
 }) => {
   const [state, setState] = useState(State.Done);
+  const handOnTimerTime = useRef(0);
+  const timer = useRef(0);
+
+  const Ready = () => {
+    setState((state) => {
+      if (state === State.HandOnTimer) {
+        return State.Ready;
+      }
+      return state;
+    });
+  };
 
   const transit = useCallback(
     (state: State, event: number) => {
       const nextState = transition[state][event];
       switch (nextState) {
         case State.Done:
+          clearTimeout(timer.current);
           break;
         case State.Running:
           startTimer();
@@ -50,7 +65,14 @@ const useController = ({
           break;
         }
         case State.HandOnTimer:
+          timer.current = setTimeout(Ready, 500);
+          // handOnTimerTime.current = Math.floor(performance.now());
           resetTimer();
+          break;
+        case State.Ready:
+          if (Math.floor(performance.now()) - handOnTimerTime.current < 500) {
+            return State.HandOnTimer;
+          }
           break;
         case State.Ignore:
           return state;
@@ -72,13 +94,15 @@ const useController = ({
     const keyDown = (e: KeyboardEvent) => {
       if (isTimerKey(e)) {
         e.stopPropagation();
-        setState((state) => transit(state, 0));
+        down();
+        // setState((state) => transit(state, 0));
       }
     };
     const keyUp = (e: KeyboardEvent) => {
       if (isTimerKey(e)) {
         e.stopPropagation();
-        setState((state) => transit(state, 1));
+        up();
+        // setState((state) => transit(state, 1));
       }
     };
 
@@ -89,6 +113,7 @@ const useController = ({
       window.removeEventListener("keydown", keyDown);
       window.removeEventListener("keyup", keyUp);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transit]);
 
   return { state, down, up };

@@ -24,7 +24,7 @@ function Results({
       className={cn(className, "flex flex-col justify-start overflow-hidden")}
     >
       <div className="no-scrollbar overflow-y-scroll">
-        <Table hideHeader>
+        <Table hideHeader aria-label="results">
           <TableHeader>
             <TableColumn>Number</TableColumn>
             <TableColumn>Time</TableColumn>
