@@ -1,3 +1,4 @@
+import { Divider } from "@nextui-org/divider";
 import { Alg } from "cubing/alg";
 import EventSwitch from "./event-switch";
 import { SessionType } from "./lib/useSession";
@@ -22,9 +23,11 @@ function DeskTopView({
 }) {
   return (
     <div className="grid h-dvh select-none grid-cols-[1fr_3fr]">
-      <div className="flex h-dvh flex-col divide-y-2 px-2 py-4">
+      <div className="flex h-dvh flex-col border-r-1 px-2 py-4">
         <SessionSwitch session={session} />
+        <Divider className="my-2" />
         <Stats session={session} className="py-4" />
+        <Divider className="my-2" />
         <Results session={session} />
       </div>
       <div className="flex h-dvh touch-none flex-col py-4">
