@@ -74,6 +74,7 @@ function App() {
       />
     ) : (
       <MobileView
+        view={view}
         session={session}
         scramble={scramble}
         controller={controller}
@@ -82,10 +83,10 @@ function App() {
       />
     );
   } else if (view === "results") {
-    return <MobileResults setView={setView} session={session} />;
+    return <MobileResults view={view} setView={setView} session={session} />;
   } else if (view === "settings") {
     return (
-      <MobileLayout setView={setView}>
+      <MobileLayout setView={setView} view={view}>
         <Settings session={session} />
       </MobileLayout>
     );

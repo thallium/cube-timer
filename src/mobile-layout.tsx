@@ -5,12 +5,14 @@ import { ViewType } from "./types/view";
 
 function MobileLayout({
   children,
+  view,
   setView,
   className,
 }: {
   className?: string;
   children: React.ReactNode;
   setView: (setView: ViewType) => void;
+  view: string;
 }) {
   return (
     <div
@@ -20,7 +22,7 @@ function MobileLayout({
       )}
     >
       {children}
-      <BottomBar setView={setView} />
+      <BottomBar setView={setView} view={view} />
     </div>
   );
 }

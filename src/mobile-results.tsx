@@ -7,13 +7,15 @@ import { ViewType } from "./types/view";
 function MobileResults({
   session,
   setView,
+  view,
 }: {
   className?: string;
   session: SessionType;
+  view: string;
   setView: (view: ViewType) => void;
 }) {
   return (
-    <MobileLayout setView={setView} className=" touch-none">
+    <MobileLayout view={view} setView={setView} className=" touch-none">
       <SessionSwitch session={session} />
       <Results session={session} className="grow px-4" />
     </MobileLayout>

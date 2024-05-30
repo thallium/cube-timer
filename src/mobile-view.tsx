@@ -14,6 +14,7 @@ function MobileView({
   session,
   scramble,
   time,
+  view,
   setView,
   controller,
 }: {
@@ -21,6 +22,7 @@ function MobileView({
   scramble: Alg | undefined;
   controller: ControllerType;
   time: number;
+  view: string;
   setView: (view: ViewType) => void;
 }) {
   const { state, up, down } = controller;
@@ -38,7 +40,7 @@ function MobileView({
   }, [touchArea.current]);
 
   return (
-    <MobileLayout setView={setView} className="touch-none">
+    <MobileLayout setView={setView} view={view} className="touch-none">
       <div>
         <EventSwitch session={session} />
         <ScrambleBar scramble={scramble?.toString()} />
