@@ -34,11 +34,12 @@ function AttemptRow({
       </Button>
       <Button
         variant="light"
-        className="grow px-3 py-2 text-left text-2xl"
+        className="justify-start px-3 py-2 text-left text-2xl"
         onPress={onOpen}
       >
         <FormattedTime time={totalResultMs} />
       </Button>
+      <div className="grow"></div>
       <div className="px-3 py-2">
         <Button
           isIconOnly
