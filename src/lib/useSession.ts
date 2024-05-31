@@ -1,9 +1,9 @@
+import { getSetting } from "@/lib/settings";
 import { Alg } from "cubing/alg";
 import PouchDB from "pouchdb-browser";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AttemptData } from "./attempt-data";
 import { EventID } from "./events";
-import { readSetting } from "./settings";
 
 export type Session = {
   _id: string; // id is the name of the group
@@ -22,7 +22,7 @@ export function useSession() {
 
     sync.current = PouchDB.sync(
       "session_" + name,
-      readSetting("remoteDB") + "/session_" + name,
+      getSetting("remoteDB") + "/session_" + name,
       {
         live: true,
         retry: true,

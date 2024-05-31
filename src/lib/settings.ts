@@ -1,22 +1,9 @@
-import { useState } from "react";
+export type Setting = "remoteDB";
 
-export function useSettings(): {
-  remoteDB: [string, (url: string) => void];
-} {
-  const [remoteDB, setRemoteDB] = useState(
-    localStorage.getItem("remoteDB") || "",
-  );
-  return {
-    remoteDB: [
-      remoteDB,
-      (url: string) => {
-        localStorage.setItem("remoteDB", url);
-        setRemoteDB(url);
-      },
-    ],
-  };
+export function getSetting(setting: Setting) {
+  return localStorage.getItem(setting);
 }
 
-export function readSetting(name: string) {
-  return localStorage.getItem(name);
+export function setSetting(setting: Setting, value: string) {
+  localStorage.setItem(setting, value);
 }
