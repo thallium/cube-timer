@@ -1,3 +1,4 @@
+import { SessionType } from "@/lib/useSession";
 import { Button } from "@nextui-org/button";
 import {
   Dropdown,
@@ -8,7 +9,6 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { SessionType } from "./lib/useSession";
 
 function SessionSwitch({ session }: { session: SessionType }) {
   const [newSessionName, setNewSessionName] = useState("");

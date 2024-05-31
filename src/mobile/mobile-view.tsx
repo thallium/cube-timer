@@ -1,14 +1,14 @@
+import EventSwitch from "@/components/event-switch";
+import ScrambleBar from "@/components/scramble-bar";
+import ScrambleDisplay from "@/components/scramble-display";
+import Stats from "@/components/stats";
+import Timer from "@/components/timer";
+import { SessionType } from "@/lib/useSession";
+import MobileLayout from "@/mobile/mobile-layout";
+import { ControllerType } from "@/timing/useController";
+import { ViewType } from "@/types/view";
 import { Alg } from "cubing/alg";
 import { useEffect, useRef } from "react";
-import EventSwitch from "./event-switch";
-import { SessionType } from "./lib/useSession";
-import MobileLayout from "./mobile-layout";
-import ScrambleBar from "./scramble-bar";
-import ScrambleDisplay from "./scramble-display";
-import Stats from "./stats";
-import Timer from "./timer";
-import { ControllerType } from "./timing/useController";
-import { ViewType } from "./types/view";
 
 function MobileView({
   session,

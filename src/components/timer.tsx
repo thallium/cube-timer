@@ -1,6 +1,6 @@
-import { timeParts } from "./lib/stats";
-import { cn } from "./lib/utils";
-import { State } from "./timing/useController";
+import { timeParts } from "@/lib/stats";
+import { cn } from "@/lib/utils";
+import { State } from "@/timing/useController";
 
 function Timer({
   state,

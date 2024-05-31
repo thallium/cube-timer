@@ -1,8 +1,8 @@
+import { useSettings } from "@/lib/settings";
+import { SessionType } from "@/lib/useSession";
 import { Button } from "@nextui-org/button";
 import PouchDb from "pouchdb-browser";
 import { useState } from "react";
-import { useSettings } from "./lib/settings";
-import { SessionType } from "./lib/useSession";
 
 function Settings({
   session,

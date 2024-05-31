@@ -8,6 +8,9 @@
     "types": [
       "vite-plugin-pwa/client"
     ],
+    "paths": {
+      "@/*": ["./src/*"],
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",

@@ -1,3 +1,6 @@
+import { EventID, eventList } from "@/lib/events";
+import { SessionType } from "@/lib/useSession";
+import { cn } from "@/lib/utils";
 import { Button } from "@nextui-org/button";
 import {
   Dropdown,
@@ -5,9 +8,6 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown";
-import { EventID, eventList } from "./lib/events";
-import { SessionType } from "./lib/useSession";
-import { cn } from "./lib/utils";
 
 function EventSwitch({ session }: { session: SessionType }) {
   return (

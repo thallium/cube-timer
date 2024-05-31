@@ -1,7 +1,7 @@
 import React from "react";
-import BottomBar from "./bottom-bar";
-import { cn } from "./lib/utils";
-import { ViewType } from "./types/view";
+import BottomBar from "../components/bottom-bar";
+import { cn } from "../lib/utils";
+import { ViewType } from "../types/view";
 
 function MobileLayout({
   children,

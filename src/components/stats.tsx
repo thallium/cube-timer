@@ -1,7 +1,7 @@
+import FormattedTime from "@/components/FormattedTime";
+import { getStats } from "@/lib/stats";
+import { SessionType } from "@/lib/useSession";
 import { cn } from "@nextui-org/system";
-import FormattedTime from "./components/FormattedTime";
-import { getStats } from "./lib/stats";
-import { SessionType } from "./lib/useSession";
 
 function Stats({
   session,
@@ -24,7 +24,7 @@ function Stats({
     >
       <div>{"#" + attempts.length}</div>
       <div>
-        best:{" "}
+        Best:{" "}
         <FormattedTime className="inline" textSize={textSize} time={best} />
       </div>
       <div>

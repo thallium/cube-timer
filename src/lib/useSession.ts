@@ -104,6 +104,7 @@ export function useSession() {
         unixDate: date,
         totalResultMs: time,
         scramble: scramble?.toString(),
+        event: session?.event,
       };
       attemptDB.current.put(attempt).then(() => {
         setAttemptsFromDB();

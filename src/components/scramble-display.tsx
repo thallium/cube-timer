@@ -1,9 +1,9 @@
+import { EventID } from "@/lib/events";
 import { cn } from "@nextui-org/system";
 import { Alg } from "cubing/alg";
 import "cubing/twisty";
 import { TwistyPlayer } from "cubing/twisty";
 import { useEffect, useRef } from "react";
-import { EventID } from "./lib/events";
 
 const eventToPuzzle = {
   "222": "2x2x2",

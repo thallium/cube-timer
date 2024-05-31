@@ -1,8 +1,8 @@
-import { SessionType } from "./lib/useSession";
-import MobileLayout from "./mobile-layout";
-import Results from "./results";
-import SessionSwitch from "./session-switch";
-import { ViewType } from "./types/view";
+import Results from "@/components/results";
+import SessionSwitch from "@/components/session-switch";
+import { SessionType } from "@/lib/useSession";
+import MobileLayout from "@/mobile/mobile-layout";
+import { ViewType } from "@/types/view";
 
 function MobileResults({
   session,

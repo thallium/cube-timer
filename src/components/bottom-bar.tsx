@@ -1,7 +1,7 @@
 import { Button } from "@nextui-org/button";
 import { cn } from "@nextui-org/system";
 import { List, Settings, Timer } from "lucide-react";
-import { ViewType } from "./types/view";
+import { ViewType } from "../types/view";
 
 function BottomBar({
   setView,

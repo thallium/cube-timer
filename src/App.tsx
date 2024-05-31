@@ -4,17 +4,17 @@ import { randomScrambleForEvent } from "cubing/scramble";
 import { useCallback, useEffect, useState } from "react";
 import { useMedia } from "use-media";
 // import { useRegisterSW } from "virtual:pwa-register/react";
+import Settings from "@/components/settings";
+import DeskTopView from "@/desktop-view";
+import { EventID } from "@/lib/events";
+import { useSession } from "@/lib/useSession";
+import MobileLayout from "@/mobile/mobile-layout";
+import MobileResults from "@/mobile/mobile-results";
+import MobileView from "@/mobile/mobile-view";
+import useController from "@/timing/useController";
+import useTimer from "@/timing/useTimer";
+import { ViewType } from "@/types/view";
 import "./App.css";
-import DeskTopView from "./desktop-view";
-import { EventID } from "./lib/events";
-import { useSession } from "./lib/useSession";
-import MobileLayout from "./mobile-layout";
-import MobileResults from "./mobile-results";
-import MobileView from "./mobile-view";
-import Settings from "./settings";
-import useController from "./timing/useController";
-import useTimer from "./timing/useTimer";
-import { ViewType } from "./types/view";
 
 async function genScramble(event: EventID) {
   return randomScrambleForEvent(event);

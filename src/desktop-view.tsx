@@ -1,13 +1,13 @@
+import EventSwitch from "@/components/event-switch";
+import Results from "@/components/results";
+import ScrambleDisplay from "@/components/scramble-display";
+import SessionSwitch from "@/components/session-switch";
+import Stats from "@/components/stats";
+import Timer from "@/components/timer";
 import { Divider } from "@nextui-org/divider";
 import { Alg } from "cubing/alg";
-import EventSwitch from "./event-switch";
+import ScrambleBar from "./components/scramble-bar";
 import { SessionType } from "./lib/useSession";
-import Results from "./results";
-import ScrambleBar from "./scramble-bar";
-import ScrambleDisplay from "./scramble-display";
-import SessionSwitch from "./session-switch";
-import Stats from "./stats";
-import Timer from "./timer";
 import { State } from "./timing/useController";
 
 function DeskTopView({
