@@ -16,6 +16,7 @@ function Results({
       >
         <div className="no-scrollbar divide-y-1 overflow-y-scroll">
           {session.attempts
+            .filter((a) => a.session === session.currentSession?._id)
             .map((row, index) => (
               <AttemptRow row={row} index={index} session={session} />
             ))

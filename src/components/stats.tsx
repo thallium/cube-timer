@@ -12,7 +12,9 @@ function Stats({
   className?: string;
   textSize?: string;
 }) {
-  const { attempts } = session;
+  const attempts = session.attempts.filter(
+    (a) => a.session === session.currentSession?._id,
+  );
   const { ao5, ao12, best } = getStats(attempts);
   return (
     <div

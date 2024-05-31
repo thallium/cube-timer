@@ -6,6 +6,7 @@ type AlgString = string;
 // A *solve* is the portion of an attempt when the timer is running.
 export interface AttemptData {
   _id: string;
+  session: string;
   // Total result *including* penalties, rounded to the nearest millisecond.
   // TODO: FMC, multi blind, BLD memo info
   totalResultMs: number;
