@@ -10,7 +10,10 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/modal";
+import { motion } from "framer-motion";
 import { X } from "lucide-react";
+
+const t = (d: number) => d * 4;
 
 function AttemptRow({
   row,
@@ -24,7 +27,26 @@ function AttemptRow({
   const { _id, totalResultMs } = row;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
-    <div key={_id} className="flex flex-row items-center justify-between">
+    <motion.div
+      //   layout
+      initial={{ height: 0, opacity: 0 }}
+      animate={{
+        height: "auto",
+        opacity: 1,
+        transition: {
+          bounce: 0.3,
+          opacity: { delay: t(0.025) },
+        },
+      }}
+      exit={{ height: 0, opacity: 0 }}
+      transition={{
+        duration: t(0.1),
+        bounce: 0,
+        opacity: { duration: t(0.03) },
+      }}
+      key={_id}
+      className="flex flex-row items-center justify-between border-b-1"
+    >
       <Button
         variant="light"
         className="w-20 px-3 py-2 text-center text-2xl text-default-500"
@@ -73,9 +95,7 @@ function AttemptRow({
                 }}
                 isCompact={true}
               >
-                {/* <p className=" overflow-x-hidden text-ellipsis whitespace-nowrap"> */}
                 {row.scramble}
-                {/* </p> */}
               </AccordionItem>
             </Accordion>
             <p>Date: {new Date(row.unixDate).toLocaleString()}</p>
@@ -83,7 +103,7 @@ function AttemptRow({
           </ModalBody>
         </ModalContent>
       </Modal>
-    </div>
+    </motion.div>
   );
 }
 

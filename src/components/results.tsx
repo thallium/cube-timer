@@ -1,3 +1,4 @@
+import { AnimatePresence } from "framer-motion";
 import { SessionType } from "../lib/useSession";
 import { cn } from "../lib/utils";
 import AttemptRow from "./AttemptRow";
@@ -14,13 +15,20 @@ function Results({
       <div
         className={cn(className, "flex flex-col justify-start overflow-hidden")}
       >
-        <div className="no-scrollbar divide-y-1 overflow-y-scroll">
-          {session.attempts
-            .filter((a) => a.session === session.currentSession?._id)
-            .map((row, index) => (
-              <AttemptRow row={row} index={index} session={session} />
-            ))
-            .toReversed()}
+        <div className="no-scrollbar overflow-y-scroll">
+          <AnimatePresence initial={false}>
+            {session.attempts
+              .filter((a) => a.session === session.currentSession?._id)
+              .map((row, index) => (
+                <AttemptRow
+                  key={row._id}
+                  row={row}
+                  index={index}
+                  session={session}
+                />
+              ))
+              .toReversed()}
+          </AnimatePresence>
         </div>
       </div>
     </>
