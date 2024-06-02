@@ -1,7 +1,7 @@
 import { getSetting } from "@/lib/settings";
 import { Alg } from "cubing/alg";
 import PouchDB from "pouchdb-browser";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AttemptData } from "./attempt-data";
 import { EventID } from "./events";
 
@@ -18,10 +18,10 @@ export function useSession() {
   const [session, setSession] = useState<Session>();
   const [attempts, setAttempts] = useState<AttemptData[]>([]);
 
-  const setAttemptsFromDB = async () => {
+  const setAttemptsFromDB = useCallback(async () => {
     const res = await attemptDB.current.allDocs({ include_docs: true });
     setAttempts(res.rows.map((row) => row.doc as unknown as AttemptData));
-  };
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -54,14 +54,17 @@ export function useSession() {
     })();
   }, []);
 
-  const changeSession = (name: string) => {
-    sessionsDB.current.get(name).then((res) => {
-      setSession(res as unknown as Session);
-      setAttemptsFromDB();
-    });
-  };
+  const changeSession = useCallback(
+    (name: string) => {
+      sessionsDB.current.get(name).then((res) => {
+        setSession(res as unknown as Session);
+        setAttemptsFromDB();
+      });
+    },
+    [setAttemptsFromDB],
+  );
 
-  const createSession = async (name: string) => {
+  const createSession = useCallback(async (name: string) => {
     if (!name) return;
 
     await sessionsDB.current.put({
@@ -70,59 +73,81 @@ export function useSession() {
     } as Session);
     const res = await sessionsDB.current.allDocs({ include_docs: true });
     setSessions(res.rows.map((row) => row.doc as unknown as Session));
-  };
+  }, []);
 
-  const addAttempt = (time: number, scramble: Alg | undefined) => {
-    const date = Date.now();
-    const attempt: AttemptData = {
-      _id: date.toString(),
-      unixDate: date,
-      totalResultMs: time,
-      scramble: scramble?.toString(),
-      event: session?.event,
-      session: session?._id || "default",
-    };
-    attemptDB.current.put(attempt).then(() => {
-      setAttemptsFromDB();
-    });
-  };
+  const addAttempt = useCallback(
+    (time: number, scramble: Alg | undefined) => {
+      const date = Date.now();
+      const attempt: AttemptData = {
+        _id: date.toString(),
+        unixDate: date,
+        totalResultMs: time,
+        scramble: scramble?.toString(),
+        event: session?.event,
+        session: session?._id || "default",
+      };
+      attemptDB.current.put(attempt).then(() => {
+        setAttemptsFromDB();
+      });
+    },
+    [session?._id, session?.event, setAttemptsFromDB],
+  );
 
-  const deleteAttempt = async (id: string) => {
-    const doc = await attemptDB.current.get(id);
-    await attemptDB.current.remove(doc);
-    await setAttemptsFromDB();
-  };
+  const deleteAttempt = useCallback(
+    async (id: string) => {
+      const doc = await attemptDB.current.get(id);
+      await attemptDB.current.remove(doc);
+      await setAttemptsFromDB();
+    },
+    [setAttemptsFromDB],
+  );
 
-  const changeEvent = async (name: EventID) => {
-    if (!session) return;
+  const changeEvent = useCallback(
+    async (name: EventID) => {
+      if (!session) return;
 
-    setSession({ ...session, event: name });
-    const doc = await sessionsDB.current.get(session._id);
-    await sessionsDB.current.put({
-      _id: session._id,
-      _rev: doc._rev,
-      event: name,
-    });
-  };
+      setSession({ ...session, event: name });
+      const doc = await sessionsDB.current.get(session._id);
+      await sessionsDB.current.put({
+        _id: session._id,
+        _rev: doc._rev,
+        event: name,
+      });
+    },
+    [session],
+  );
 
-  const loadFromDB = () => {
+  const loadFromDB = useCallback(() => {
     sessionsDB.current.allDocs({ include_docs: true }).then((res) => {
       setSessions(res.rows.map((row) => row.doc as unknown as Session));
       setAttemptsFromDB();
     });
-  };
+  }, [setAttemptsFromDB]);
 
-  return {
-    currentSession: session,
-    sessions: sessions,
-    changeSession,
-    createSession,
-    addAttempt,
-    deleteAttempt,
-    attempts,
-    changeEvent,
-    loadFromDB,
-  };
+  return useMemo(
+    () => ({
+      currentSession: session,
+      sessions: sessions,
+      changeSession,
+      createSession,
+      addAttempt,
+      deleteAttempt,
+      attempts,
+      changeEvent,
+      loadFromDB,
+    }),
+    [
+      addAttempt,
+      attempts,
+      changeEvent,
+      changeSession,
+      createSession,
+      deleteAttempt,
+      loadFromDB,
+      session,
+      sessions,
+    ],
+  );
 }
 
 export type SessionType = ReturnType<typeof useSession>;

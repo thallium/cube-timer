@@ -6,9 +6,18 @@ import Stats from "@/components/stats";
 import Timer from "@/components/timer";
 import { Divider } from "@nextui-org/divider";
 import { Alg } from "cubing/alg";
+import React from "react";
 import ScrambleBar from "./components/scramble-bar";
 import { SessionType } from "./lib/useSession";
 import { State } from "./timing/useController";
+
+const MemoedSessionSwitch = React.memo(SessionSwitch);
+const MemoedStats = React.memo(Stats);
+const MemoedResults = React.memo(Results);
+const MemoedEventSwitch = React.memo(EventSwitch);
+const MemoedScrambleBar = React.memo(ScrambleBar);
+const MemoedTimer = React.memo(Timer);
+const MemoedScrambleDisplay = React.memo(ScrambleDisplay);
 
 function DeskTopView({
   session,
@@ -24,20 +33,20 @@ function DeskTopView({
   return (
     <div className="grid h-dvh select-none grid-cols-[1fr_3fr]">
       <div className="flex h-dvh flex-col border-r-1 px-2 py-4">
-        <SessionSwitch session={session} />
+        <MemoedSessionSwitch session={session} />
         <Divider className="my-2" />
-        <Stats session={session} className="py-4" />
+        <MemoedStats session={session} className="py-4" />
         <Divider className="my-2" />
-        <Results session={session} />
+        <MemoedResults session={session} />
       </div>
       <div className="flex h-dvh touch-none flex-col py-4">
         <div>
-          <EventSwitch session={session} />
-          <ScrambleBar scramble={scramble?.toString()} />
+          <MemoedEventSwitch session={session} />
+          <MemoedScrambleBar scramble={scramble?.toString()} />
         </div>
         <div className="flex grow flex-col justify-between">
-          <Timer state={state} time={time} className=" grow" />
-          <ScrambleDisplay
+          <MemoedTimer state={state} time={time} className=" grow" />
+          <MemoedScrambleDisplay
             scramble={scramble}
             event={session.currentSession?.event ?? "333"}
             className=" grow-0"
