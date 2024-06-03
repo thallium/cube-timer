@@ -5,16 +5,21 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AttemptData } from "./attempt-data";
 import { EventID } from "./events";
 
+interface Sessions {
+  sessions: Session[];
+}
+
 export type Session = {
-  _id: string; // id is the name of the group
+  name: string; // id is the name of the group
   event: EventID;
+  createdAt?: number;
 };
 
 export function useSession() {
-  const sessionsDB = useRef(new PouchDB("sessions"));
+  const dataDB = useRef(new PouchDB("data"));
   const attemptDB = useRef<PouchDB.Database>(new PouchDB("attempts"));
 
-  const [sessions, setSessions] = useState<Session[]>([]);
+  const [sessions, setSessionsState] = useState<Session[]>([]);
   const [session, setSession] = useState<Session>();
   const [attempts, setAttempts] = useState<AttemptData[]>([]);
 
@@ -26,19 +31,27 @@ export function useSession() {
   useEffect(() => {
     (async () => {
       // Create default session if it doesn't exist
-      let res = await sessionsDB.current.allDocs();
-      if (res.total_rows === 0) {
-        await sessionsDB.current.put({
-          _id: "default",
-          event: "333",
-        } as Session);
+      try {
+        await dataDB.current.get("sessions");
+      } catch (e) {
+        await dataDB.current.put({
+          _id: "sessions",
+          sessions: [
+            {
+              name: "default",
+              event: "333",
+              createdAt: Date.now(),
+            } as Session,
+          ],
+        });
       }
 
       // Set current session and sessions
-      res = await sessionsDB.current.allDocs({ include_docs: true });
-      setSessions(res.rows.map((row) => row.doc as unknown as Session));
+      const sessionsTmp = ((await dataDB.current.get("sessions")) as Sessions)
+        .sessions;
+      setSessionsState(sessionsTmp);
       // TODO: save the last session in local storage
-      setSession(res.rows[0].doc as unknown as Session);
+      setSession(sessionsTmp[0]);
 
       // Set attempts
       await setAttemptsFromDB();
@@ -56,24 +69,57 @@ export function useSession() {
 
   const changeSession = useCallback(
     (name: string) => {
-      sessionsDB.current.get(name).then((res) => {
-        setSession(res as unknown as Session);
-        setAttemptsFromDB();
-      });
+      setSession(sessions.find((s) => s.name === name));
     },
-    [setAttemptsFromDB],
+    [sessions],
   );
 
-  const createSession = useCallback(async (name: string) => {
-    if (!name) return;
-
-    await sessionsDB.current.put({
-      _id: name,
-      event: "333",
-    } as Session);
-    const res = await sessionsDB.current.allDocs({ include_docs: true });
-    setSessions(res.rows.map((row) => row.doc as unknown as Session));
+  const setSessions = useCallback(async (sessions: Session[]) => {
+    try {
+      const doc = await dataDB.current.get("sessions");
+      dataDB.current.put({
+        _id: "sessions",
+        _rev: doc._rev,
+        sessions,
+      });
+      setSessionsState(sessions);
+    } catch (e) {
+      console.error(e);
+    }
   }, []);
+
+  const createSession = useCallback(
+    async (name: string) => {
+      if (!name) return;
+
+      setSessions([
+        ...sessions,
+        { name, event: "333", createdAt: Date.now() } as Session,
+      ]);
+    },
+    [sessions, setSessions],
+  );
+
+  const deleteSession = useCallback(
+    async (toDelete: string) => {
+      const newSessions = sessions.filter((s) => s.name !== toDelete);
+      if (newSessions.length === 0) {
+        alert("Can't delete the last session");
+        return;
+      }
+      setSessions(newSessions);
+      setSession(newSessions[0]);
+      const toDeleteAttempts = attempts
+        .filter((a) => a.session === toDelete)
+        .map((a) => {
+          (a as AttemptData & { _deleted: boolean })._deleted = true;
+          return a;
+        });
+      await attemptDB.current.bulkDocs(toDeleteAttempts);
+      setAttemptsFromDB();
+    },
+    [attempts, sessions, setAttemptsFromDB, setSessions],
+  );
 
   const addAttempt = useCallback(
     (time: number, scramble: Alg | undefined) => {
@@ -84,13 +130,13 @@ export function useSession() {
         totalResultMs: time,
         scramble: scramble?.toString(),
         event: session?.event,
-        session: session?._id || "default",
+        session: session?.name || "default",
       };
       attemptDB.current.put(attempt).then(() => {
         setAttemptsFromDB();
       });
     },
-    [session?._id, session?.event, setAttemptsFromDB],
+    [session?.name, session?.event, setAttemptsFromDB],
   );
 
   const deleteAttempt = useCallback(
@@ -106,23 +152,20 @@ export function useSession() {
     async (name: EventID) => {
       if (!session) return;
 
-      setSession({ ...session, event: name });
-      const doc = await sessionsDB.current.get(session._id);
-      await sessionsDB.current.put({
-        _id: session._id,
-        _rev: doc._rev,
-        event: name,
-      });
+      const newSessions = [...sessions];
+      newSessions.find((s) => s.name === session.name)!.event = name;
+      setSessions(newSessions);
     },
-    [session],
+    [session, setSessions, sessions],
   );
 
-  const loadFromDB = useCallback(() => {
-    sessionsDB.current.allDocs({ include_docs: true }).then((res) => {
-      setSessions(res.rows.map((row) => row.doc as unknown as Session));
-      setAttemptsFromDB();
-    });
-  }, [setAttemptsFromDB]);
+  const loadFromDB = useCallback(async () => {
+    const sessionsTmp = ((await dataDB.current.get("sessions")) as Sessions)
+      .sessions;
+    setSessionsState(sessionsTmp);
+    // TODO: save the last session in local storage
+    setSession(sessionsTmp[0]);
+  }, []);
 
   return useMemo(
     () => ({
@@ -130,9 +173,11 @@ export function useSession() {
       sessions: sessions,
       changeSession,
       createSession,
+      setSessions,
+      deleteSession,
+      attempts,
       addAttempt,
       deleteAttempt,
-      attempts,
       changeEvent,
       loadFromDB,
     }),
@@ -146,6 +191,8 @@ export function useSession() {
       loadFromDB,
       session,
       sessions,
+      setSessions,
+      deleteSession,
     ],
   );
 }

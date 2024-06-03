@@ -29,6 +29,7 @@
     "lucide-react": "^0.378.0",
     "pouchdb-browser": "^8.0.1",
     "react": "^18.2.0",
+    "react-aria": "^3.33.1",
     "react-dom": "^18.2.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-safe-area": "^0.5.1",

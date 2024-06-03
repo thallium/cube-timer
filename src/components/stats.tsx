@@ -13,7 +13,7 @@ function Stats({
   textSize?: string;
 }) {
   const attempts = session.attempts.filter(
-    (a) => a.session === session.currentSession?._id,
+    (a) => a.session === session.currentSession!.name,
   );
   const { ao5, ao12, best } = getStats(attempts);
   return (

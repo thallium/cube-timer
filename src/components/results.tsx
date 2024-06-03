@@ -18,7 +18,7 @@ function Results({
         <div className="no-scrollbar overflow-y-scroll">
           <AnimatePresence initial={false}>
             {session.attempts
-              .filter((a) => a.session === session.currentSession?._id)
+              .filter((a) => a.session === session.currentSession!.name)
               .map((row, index) => (
                 <AttemptRow
                   key={row._id}

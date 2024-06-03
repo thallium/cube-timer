@@ -40,17 +40,9 @@ function Settings({ session }: { session: SessionType }) {
             className=" block text-lg sm:text-2xl"
             onClick={async () => {
               try {
-                await PouchDb.sync("sessions", remoteDB + "/sessions");
                 setSyncMessage("Syncing...");
+                await PouchDb.sync("data", remoteDB + "/data");
                 session.loadFromDB();
-                await Promise.all(
-                  session.sessions.map((s) => {
-                    return PouchDb.sync(
-                      "session_" + s._id,
-                      remoteDB + "/session_" + s._id,
-                    );
-                  }),
-                );
                 setSyncMessage("Synced");
                 setTimeout(() => setSyncMessage(""), 3000);
               } catch (e) {

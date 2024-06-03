@@ -24,11 +24,6 @@ import { registerSW } from "virtual:pwa-register";
 
 registerSW({ immediate: true });
 function App() {
-  // const {
-  //   // offlineReady: [offlineReady],
-  //   // needRefresh: [needRefresh],
-  //   updateServiceWorker,
-  // } = useRegisterSW({});
   const isWide = useMedia({ minWidth: "640px" });
   const [view, setView] = useState<ViewType>("timer");
 
