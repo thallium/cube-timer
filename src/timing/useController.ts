@@ -93,6 +93,7 @@ const useController = ({
   useEffect(() => {
     const keyDown = (e: KeyboardEvent) => {
       if (isTimerKey(e)) {
+        e.preventDefault();
         e.stopPropagation();
         down();
         // setState((state) => transit(state, 0));
@@ -100,6 +101,7 @@ const useController = ({
     };
     const keyUp = (e: KeyboardEvent) => {
       if (isTimerKey(e)) {
+        e.preventDefault();
         e.stopPropagation();
         up();
         // setState((state) => transit(state, 1));
