@@ -5,10 +5,25 @@ import { Button } from "@nextui-org/button";
 import { Textarea } from "@nextui-org/input";
 import PouchDb from "pouchdb-browser";
 import { useState } from "react";
+import { useRegisterSW } from "virtual:pwa-register/react";
 
 function Settings({ session }: { session: SessionType }) {
   const [syncMessage, setSyncMessage] = useState("");
   const [remoteDB, setRemoteDB] = useState(getSetting("remoteDB") || "");
+  const {
+    // offlineReady: [offlineReady, setOfflineReady],
+    needRefresh: [needRefresh],
+    updateServiceWorker,
+  } = useRegisterSW({
+    onRegistered(r) {
+      // eslint-disable-next-line prefer-template
+      console.log("SW Registered: " + r);
+    },
+    onRegisterError(error) {
+      console.log("SW registration error", error);
+    },
+  });
+
   return (
     <div className="px-4">
       <h1 className="my-4 text-4xl">Settings</h1>
@@ -56,6 +71,9 @@ function Settings({ session }: { session: SessionType }) {
           <div>{syncMessage}</div>
         </AccordionItem>
       </Accordion>
+      {needRefresh && (
+        <Button onPress={() => updateServiceWorker(true)}>Reload</Button>
+      )}
     </div>
   );
 }

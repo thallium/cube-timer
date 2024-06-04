@@ -1,9 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Alg } from "cubing/alg";
-import { randomScrambleForEvent } from "cubing/scramble";
-import { useCallback, useEffect, useState } from "react";
-import { useMedia } from "use-media";
-// import { useRegisterSW } from "virtual:pwa-register/react";
 import Settings from "@/components/settings";
 import DeskTopView from "@/desktop-view";
 import { EventID } from "@/lib/events";
@@ -14,15 +9,16 @@ import MobileView from "@/mobile/mobile-view";
 import useController from "@/timing/useController";
 import useTimer from "@/timing/useTimer";
 import { ViewType } from "@/types/view";
+import { Alg } from "cubing/alg";
+import { randomScrambleForEvent } from "cubing/scramble";
+import { useCallback, useEffect, useState } from "react";
+import { useMedia } from "use-media";
 import "./App.css";
 
 async function genScramble(event: EventID) {
   return randomScrambleForEvent(event);
 }
 
-import { registerSW } from "virtual:pwa-register";
-
-registerSW({ immediate: true });
 function App() {
   const isWide = useMedia({ minWidth: "640px" });
   const [view, setView] = useState<ViewType>("timer");

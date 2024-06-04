@@ -13,7 +13,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: "autoUpdate",
+      registerType: "prompt",
       manifest: {
         name: "Tl Timer",
         description: "A cube timer",
