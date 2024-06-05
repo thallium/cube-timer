@@ -9,15 +9,19 @@ import Collapse from "./ui/collapse";
 
 const t = (d: number) => d * 4;
 
-function AttemptRow({
-  row,
-  index,
-  session,
-}: {
+interface AttemptRowProps {
   row: AttemptData;
   index: number;
   session: SessionType;
-}) {
+  maxDigits: number;
+}
+
+const AttemptRow: React.FC<AttemptRowProps> = ({
+  row,
+  index,
+  session,
+  maxDigits,
+}) => {
   const { _id, totalResultMs } = row;
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -36,7 +40,7 @@ function AttemptRow({
       exit={{ height: 0, opacity: 0 }}
       transition={{
         duration: t(0.1),
-        bounce: 0,
+        bounce: 0.2,
         opacity: { duration: t(0.03) },
       }}
       key={_id}
@@ -45,20 +49,20 @@ function AttemptRow({
         <Button
           variant="subtle"
           color="gray.6"
-          className="w-20 text-center text-2xl font-normal"
+          className={`text-center font-mono text-2xl font-normal`}
           onClick={open}
+          w={2.25 + maxDigits + "rem"}
         >
           {index + 1}
         </Button>
         <Button
           variant="subtle"
           color="dark"
-          className="text-2xl font-normal"
+          className="grow text-2xl font-normal"
           classNames={{
             inner: "justify-start",
           }}
           onClick={open}
-          fullWidth
         >
           <FormattedTime time={totalResultMs} />
         </Button>
@@ -92,6 +96,6 @@ function AttemptRow({
       </Modal>
     </motion.div>
   );
-}
+};
 
 export default AttemptRow;

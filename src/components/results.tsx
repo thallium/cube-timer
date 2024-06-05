@@ -10,6 +10,9 @@ function Results({
   className?: string;
   session: SessionType;
 }) {
+  const attempts = session.attempts.filter(
+    (a) => a.session === session.currentSession!.name,
+  );
   return (
     <>
       <div
@@ -17,14 +20,14 @@ function Results({
       >
         <div className="no-scrollbar overflow-y-scroll">
           <AnimatePresence initial={false}>
-            {session.attempts
-              .filter((a) => a.session === session.currentSession!.name)
+            {attempts
               .map((row, index) => (
                 <AttemptRow
                   key={row._id}
                   row={row}
                   index={index}
                   session={session}
+                  maxDigits={Math.floor(Math.log10(attempts.length)) + 1}
                 />
               ))
               .toReversed()}
