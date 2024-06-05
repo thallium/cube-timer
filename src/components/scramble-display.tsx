@@ -1,5 +1,5 @@
 import { EventID } from "@/lib/events";
-import { cn } from "@nextui-org/system";
+import { cn } from "@/lib/utils";
 import { Alg } from "cubing/alg";
 import "cubing/twisty";
 import { TwistyPlayer } from "cubing/twisty";

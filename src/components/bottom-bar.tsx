@@ -1,5 +1,4 @@
-import { Button } from "@nextui-org/button";
-import { cn } from "@nextui-org/system";
+import { Button } from "@mantine/core";
 import { List, Settings, Timer } from "lucide-react";
 import { ViewType } from "../types/view";
 
@@ -13,26 +12,23 @@ function BottomBar({
   return (
     <div className="flex flex-row justify-around border-t-1 py-2 pb-safe-or-4">
       <Button
-        isIconOnly
-        variant="light"
+        variant="transparent"
         onClick={() => setView("timer")}
-        className={cn({ "text-primary": view === "timer" })}
+        color={view === "timer" ? "" : "dark"}
       >
         <Timer size={32} />
       </Button>
       <Button
-        isIconOnly
-        variant="light"
+        variant="transparent"
         onClick={() => setView("results")}
-        className={cn({ "text-primary": view === "results" })}
+        color={view === "results" ? "" : "dark"}
       >
         <List size={32} />
       </Button>
       <Button
-        isIconOnly
-        variant="light"
+        variant="transparent"
         onClick={() => setView("settings")}
-        className={cn({ "text-primary": view === "settings" })}
+        color={view === "settings" ? "" : "dark"}
       >
         <Settings size={32} />
       </Button>

@@ -4,7 +4,7 @@ import ScrambleDisplay from "@/components/scramble-display";
 import SessionSwitch from "@/components/session-switch";
 import Stats from "@/components/stats";
 import Timer from "@/components/timer";
-import { Divider } from "@nextui-org/divider";
+import { Divider } from "@mantine/core";
 import { Alg } from "cubing/alg";
 import React from "react";
 import ScrambleBar from "./components/scramble-bar";

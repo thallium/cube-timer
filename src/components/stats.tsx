@@ -1,7 +1,7 @@
 import FormattedTime from "@/components/FormattedTime";
 import { getStats } from "@/lib/stats";
 import { SessionType } from "@/lib/useSession";
-import { cn } from "@nextui-org/system";
+import { cn } from "@/lib/utils";
 
 function Stats({
   session,

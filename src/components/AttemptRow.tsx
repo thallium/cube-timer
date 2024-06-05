@@ -1,17 +1,11 @@
 import FormattedTime from "@/components/FormattedTime";
 import { AttemptData } from "@/lib/attempt-data";
 import { SessionType } from "@/lib/useSession";
-import { Accordion, AccordionItem } from "@nextui-org/accordion";
-import { Button } from "@nextui-org/button";
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-  useDisclosure,
-} from "@nextui-org/modal";
+import { ActionIcon, Button, Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
+import Collapse from "./ui/collapse";
 
 const t = (d: number) => d * 4;
 
@@ -25,7 +19,8 @@ function AttemptRow({
   session: SessionType;
 }) {
   const { _id, totalResultMs } = row;
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [opened, { open, close }] = useDisclosure(false);
+
   return (
     <motion.div
       //   layout
@@ -45,63 +40,56 @@ function AttemptRow({
         opacity: { duration: t(0.03) },
       }}
       key={_id}
-      className="flex flex-row items-center justify-between border-b-1"
+      className="flex flex-row items-center justify-between border-b-1 py-2"
     >
       <Button
-        variant="light"
-        className="w-20 px-3 py-2 text-center text-2xl text-default-500"
-        onPress={onOpen}
+        variant="subtle"
+        color="gray.6"
+        className="w-20 px-3 py-2 text-center text-2xl font-normal"
+        onClick={open}
       >
         {index + 1}
       </Button>
       <Button
-        variant="light"
-        className="justify-start px-3 py-2 text-left text-2xl"
-        onPress={onOpen}
+        variant="subtle"
+        color="dark"
+        className="text-2xl font-normal"
+        classNames={{
+          inner: "justify-start",
+        }}
+        onClick={open}
+        fullWidth
       >
         <FormattedTime time={totalResultMs} />
       </Button>
-      <div className="grow"></div>
-      <div className="px-3 py-2">
-        <Button
-          isIconOnly
-          variant="light"
-          onClick={() => session.deleteAttempt(_id)}
-          className="text-default-400"
-        >
-          <X />
-        </Button>
-      </div>
-      <Modal placement="center" isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent className="pb-8">
-          <ModalHeader className="flex flex-col gap-1">
-            Attempt #{index + 1}
-          </ModalHeader>
-          <ModalBody className="text-xl">
-            <FormattedTime
-              className="text-center text-3xl"
-              time={totalResultMs}
-            />
-            <Accordion className="px-0">
-              <AccordionItem
-                key={1}
-                aria-label="scramble"
-                title="Scramble"
-                classNames={{
-                  base: "px-0",
-                  trigger: "py-0",
-                  title: "text-xl",
-                  content: "font-mono",
-                }}
-                isCompact={true}
-              >
-                {row.scramble}
-              </AccordionItem>
-            </Accordion>
-            <p>Date: {new Date(row.unixDate).toLocaleString()}</p>
-            <p>Event: {row.event}</p>
-          </ModalBody>
-        </ModalContent>
+      {/* <div className="px-3 py-2"> */}
+      <ActionIcon
+        variant="subtle"
+        color="gray.6"
+        size="lg"
+        onClick={() => session.deleteAttempt(_id)}
+      >
+        <X size={24} />
+      </ActionIcon>
+      {/* </div> */}
+      <Modal
+        centered
+        opened={opened}
+        onClose={close}
+        padding="lg"
+        title={`Attempt #${index + 1}`}
+      >
+        <div className="flex flex-col gap-3 py-2 text-xl">
+          <FormattedTime
+            className="text-center text-3xl"
+            time={totalResultMs}
+          />
+          <Collapse title="Scramble">
+            <div className="font-mono">{row.scramble || "No Scramble"}</div>
+          </Collapse>
+          <p>Date: {new Date(row.unixDate).toLocaleString()}</p>
+          <p>Event: {row.event}</p>
+        </div>
       </Modal>
     </motion.div>
   );

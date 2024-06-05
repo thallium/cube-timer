@@ -1,14 +1,6 @@
 import { SessionType } from "@/lib/useSession";
-import { Button } from "@nextui-org/button";
-import { Input } from "@nextui-org/input";
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from "@nextui-org/modal";
+import { Button, Modal, TextInput } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import React, { useState } from "react";
 
 interface CreateSessionProps {
@@ -16,44 +8,42 @@ interface CreateSessionProps {
 }
 
 const CreateSession: React.FC<CreateSessionProps> = ({ session }) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [opened, { open, close }] = useDisclosure(false);
   const [newSessionName, setNewSessionName] = useState("");
   return (
     <>
-      <Button variant="bordered" className="text-lg" onPress={onOpen}>
+      <Button variant="outline" className="text-lg" onClick={open}>
         New Session
       </Button>
-      <Modal placement="top" isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent className="">
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                Sessions
-              </ModalHeader>
-              <ModalBody className="text-xl">
-                <Input
-                  autoFocus
-                  variant="flat"
-                  label="Session Name"
-                  value={newSessionName}
-                  onChange={(e) => setNewSessionName(e.target.value)}
-                />
-              </ModalBody>
-              <ModalFooter>
-                <Button
-                  variant="bordered"
-                  className="text-lg"
-                  onPress={() => {
-                    session.createSession(newSessionName);
-                    onClose();
-                  }}
-                >
-                  Create Session
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title="Sessions"
+        radius="lg"
+        classNames={{
+          title: "text-large font-semibold",
+        }}
+      >
+        <div className="text-xl">
+          <TextInput
+            autoFocus
+            radius="md"
+            size="md"
+            label="Session Name"
+            value={newSessionName}
+            onChange={(e) => setNewSessionName(e.target.value)}
+          />
+          <Button
+            variant="bordered"
+            className="mt-4 text-lg"
+            onClick={() => {
+              session.createSession(newSessionName);
+              close();
+            }}
+          >
+            Create Session
+          </Button>
+        </div>
       </Modal>
     </>
   );

@@ -1,14 +1,6 @@
 import { Session, SessionType } from "@/lib/useSession";
-import { Button } from "@nextui-org/button";
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from "@nextui-org/modal";
-import { cn } from "@nextui-org/system";
+import { ActionIcon, Button, Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { Reorder, useDragControls } from "framer-motion";
 import { GripVertical, Trash2 } from "lucide-react";
 import React from "react";
@@ -16,20 +8,20 @@ import CreateSession from "./CreateSession";
 
 interface SessionItemProps {
   session: Session;
-  currentSession: SessionType["currentSession"];
+  isCurrent: boolean;
   changeSession: SessionType["changeSession"];
   deleteSession: SessionType["deleteSession"];
-  onClose: () => void;
+  closeSwitcher: () => void;
 }
 const SessionItem: React.FC<SessionItemProps> = ({
   session,
-  currentSession,
+  isCurrent,
   changeSession,
-  onClose,
   deleteSession,
+  closeSwitcher,
 }) => {
   const dragControls = useDragControls();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [opened, { open, close }] = useDisclosure(false);
 
   return (
     <Reorder.Item
@@ -40,63 +32,53 @@ const SessionItem: React.FC<SessionItemProps> = ({
       initial={false}
     >
       <Button
-        variant="light"
-        className={cn("block w-full text-left text-2xl", {
-          "text-primary": session.name === currentSession!.name,
-        })}
-        onPress={() => {
+        variant="subtle"
+        fullWidth
+        color={isCurrent ? "" : "dark"}
+        classNames={{
+          inner: "text-2xl font-normal justify-start",
+        }}
+        onClick={() => {
           changeSession(session.name);
-          onClose();
+          closeSwitcher();
         }}
       >
         {session.name}
       </Button>
-      <Button
-        isIconOnly
-        variant="light"
-        onPress={() => {
-          onOpen();
-        }}
-      >
+      <ActionIcon variant="subtle" color="dark" onClick={open}>
         <Trash2 />
-      </Button>
+      </ActionIcon>
       <GripVertical
         className=" cursor-grab"
         onPointerDown={(e) => dragControls.start(e)}
       />
       <Modal
-        placement="top"
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        isDismissable={false}
-        isKeyboardDismissDisabled={true}
+        opened={opened}
+        onClose={close}
+        title="Warning"
+        classNames={{
+          title: "text-large font-semibold",
+        }}
       >
-        <ModalContent className="">
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Warning</ModalHeader>
-              <ModalBody className="text-xl">
-                Do you really want to delete this session? Results in this
-                session will also be deleted.
-              </ModalBody>
-              <ModalFooter>
-                <Button
-                  color="danger"
-                  variant="light"
-                  onPress={() => {
-                    deleteSession(session.name);
-                    onClose();
-                  }}
-                >
-                  Yes
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  No
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
+        <div className="text-xl">
+          Do you really want to delete this session? Results in this session
+          will also be deleted.
+        </div>
+        <div>
+          <Button
+            color="danger"
+            variant="light"
+            onClick={() => {
+              deleteSession(session.name);
+              close();
+            }}
+          >
+            Yes
+          </Button>
+          <Button color="primary" onClick={close}>
+            No
+          </Button>
+        </div>
       </Modal>
     </Reorder.Item>
   );
@@ -114,49 +96,45 @@ const SessionSwitch: React.FC<SessionSwitchProps> = ({ session }) => {
     setSessions,
     deleteSession,
   } = session;
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [opened, { open, close }] = useDisclosure(false);
 
   return (
     <div className="flex justify-center pb-2">
-      <Button
-        variant="bordered"
-        className="text-2xl"
-        tabIndex={-1}
-        onPress={onOpen}
-      >
+      <Button variant="default" className="text-2xl" onClick={open}>
         {currentSession?.name}
       </Button>
-      <Modal placement="center" isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent className="">
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                Sessions
-              </ModalHeader>
-              <ModalBody className="text-xl">
-                <Reorder.Group
-                  onReorder={setSessions}
-                  values={sessions}
-                  initial={false}
-                >
-                  {sessions.map((session) => (
-                    <SessionItem
-                      key={session.name}
-                      session={session}
-                      currentSession={currentSession}
-                      changeSession={changeSession}
-                      onClose={onClose}
-                      deleteSession={deleteSession}
-                    />
-                  ))}
-                </Reorder.Group>
-              </ModalBody>
-              <ModalFooter>
-                <CreateSession session={session} />
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
+      <Modal
+        centered
+        radius="lg"
+        opened={opened}
+        onClose={close}
+        title="Sessions"
+        padding="lg"
+        classNames={{
+          title: "text-large font-semibold",
+        }}
+      >
+        <div className="text-xl">
+          <Reorder.Group
+            onReorder={setSessions}
+            values={sessions}
+            initial={false}
+          >
+            {sessions.map((session) => (
+              <SessionItem
+                key={session.name}
+                session={session}
+                isCurrent={currentSession?.name === session.name}
+                changeSession={changeSession}
+                deleteSession={deleteSession}
+                closeSwitcher={close}
+              />
+            ))}
+          </Reorder.Group>
+        </div>
+        <div className="mt-4 flex flex-row-reverse">
+          <CreateSession session={session} />
+        </div>
       </Modal>
     </div>
   );

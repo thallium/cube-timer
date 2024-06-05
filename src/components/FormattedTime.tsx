@@ -1,4 +1,4 @@
-import { cn } from "@nextui-org/system";
+import { cn } from "@/lib/utils";
 import { timeParts } from "../lib/stats";
 
 function FormattedTime({
@@ -12,7 +12,7 @@ function FormattedTime({
 }) {
   const { secRest, decimals } = timeParts(time);
   return (
-    <div className={cn(className, textSize, "text-2xl")}>
+    <div className={cn("text-2xl", className, textSize)}>
       {isFinite(time) ? `${secRest}.${decimals}` : "—"}
     </div>
   );

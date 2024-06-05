@@ -1,48 +1,41 @@
-import { EventID, eventList } from "@/lib/events";
+import { eventList } from "@/lib/events";
 import { SessionType } from "@/lib/useSession";
 import { cn } from "@/lib/utils";
-import { Button } from "@nextui-org/button";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from "@nextui-org/dropdown";
+import { Button, Menu } from "@mantine/core";
 
 function EventSwitch({ session }: { session: SessionType }) {
   return (
     <div className="flex justify-center">
-      <Dropdown className="shadow-lg">
-        <DropdownTrigger>
+      <Menu>
+        <Menu.Target>
           <Button
-            variant="bordered"
-            radius="sm"
-            className="bg-content1 text-center text-2xl"
+            variant="default"
+            radius="md"
+            color="gray.8"
+            className="text-2xl"
           >
             {session.currentSession?.event}
           </Button>
-        </DropdownTrigger>
-        <DropdownMenu
+        </Menu.Target>
+        <Menu.Dropdown
           aria-label="Event switcher"
           variant="flat"
-          onAction={(key) => {
-            session.changeEvent(key as EventID);
-          }}
           className="rounded"
         >
           {eventList.map((event) => (
-            <DropdownItem
+            <Menu.Item
               key={event}
               aria-label={event}
-              className={cn({
+              className={cn("text-center text-2xl", {
                 "text-primary": event === session.currentSession?.event,
               })}
+              onClick={() => session.changeEvent(event)}
             >
-              <div className="text-center text-2xl">{event}</div>
-            </DropdownItem>
+              {event}
+            </Menu.Item>
           ))}
-        </DropdownMenu>
-      </Dropdown>
+        </Menu.Dropdown>
+      </Menu>
     </div>
   );
 }

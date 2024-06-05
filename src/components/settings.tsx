@@ -1,8 +1,7 @@
+import Collapse from "@/components/ui/collapse";
 import { getSetting, setSetting } from "@/lib/settings";
 import { SessionType } from "@/lib/useSession";
-import { Accordion, AccordionItem } from "@nextui-org/accordion";
-import { Button } from "@nextui-org/button";
-import { Textarea } from "@nextui-org/input";
+import { Button, Textarea } from "@mantine/core";
 import PouchDb from "pouchdb-browser";
 import { useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
@@ -27,21 +26,10 @@ function Settings({ session }: { session: SessionType }) {
   return (
     <div className="px-4">
       <h1 className="my-4 text-4xl">Settings</h1>
-      <Accordion
-        isCompact={true}
-        itemClasses={{
-          title: "text-2xl",
-        }}
-      >
-        <AccordionItem
-          title="Remote Database"
-          classNames={{
-            content: "space-y-2",
-          }}
-        >
+      <Collapse title="Remote Database" className="text-xl">
+        <div className=" space-y-2 py-2">
           <Textarea
             classNames={{
-              base: "px-0",
               input: "text-2xl",
             }}
             placeholder="Remote DB Address"
@@ -69,10 +57,10 @@ function Settings({ session }: { session: SessionType }) {
             Sync
           </Button>
           <div>{syncMessage}</div>
-        </AccordionItem>
-      </Accordion>
+        </div>
+      </Collapse>
       {needRefresh && (
-        <Button onPress={() => updateServiceWorker(true)}>Reload</Button>
+        <Button onClick={() => updateServiceWorker(true)}>Reload</Button>
       )}
     </div>
   );
