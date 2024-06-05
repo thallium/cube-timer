@@ -2,12 +2,12 @@ import Collapse from "@/components/ui/collapse";
 import { getSetting, setSetting } from "@/lib/settings";
 import { SessionType } from "@/lib/useSession";
 import { Button, Textarea } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import PouchDb from "pouchdb-browser";
 import { useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
 
 function Settings({ session }: { session: SessionType }) {
-  const [syncMessage, setSyncMessage] = useState("");
   const [remoteDB, setRemoteDB] = useState(getSetting("remoteDB") || "");
   const {
     // offlineReady: [offlineReady, setOfflineReady],
@@ -43,20 +43,28 @@ function Settings({ session }: { session: SessionType }) {
             className=" block text-lg sm:text-2xl"
             onClick={async () => {
               try {
-                setSyncMessage("Syncing...");
+                notifications.show({
+                  title: "Start Syncing...",
+                  message: "",
+                });
                 await PouchDb.sync("data", remoteDB + "/data");
                 session.loadFromDB();
-                setSyncMessage("Synced");
-                setTimeout(() => setSyncMessage(""), 3000);
+                notifications.show({
+                  color: "green",
+                  title: "Syncing successful",
+                  message: "",
+                });
               } catch (e) {
-                setSyncMessage("Error syncing: " + e);
-                setTimeout(() => setSyncMessage(""), 5000);
+                notifications.show({
+                  color: "red",
+                  title: "Error syncing:",
+                  message: e?.toString(),
+                });
               }
             }}
           >
             Sync
           </Button>
-          <div>{syncMessage}</div>
         </div>
       </Collapse>
       {needRefresh && (

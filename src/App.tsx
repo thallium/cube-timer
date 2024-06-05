@@ -9,6 +9,7 @@ import useController from "@/timing/useController";
 import useTimer from "@/timing/useTimer";
 import { ViewType } from "@/types/view";
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import { Alg } from "cubing/alg";
 import { randomScrambleForEvent } from "cubing/scramble";
 import { useCallback, useEffect, useState } from "react";
