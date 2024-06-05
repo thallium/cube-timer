@@ -59,15 +59,16 @@ const SessionItem: React.FC<SessionItemProps> = ({
         classNames={{
           title: "text-large font-semibold",
         }}
+        radius="lg"
       >
         <div className="text-xl">
           Do you really want to delete this session? Results in this session
           will also be deleted.
         </div>
-        <div>
+        <div className="mt-4 flex justify-end gap-2">
           <Button
-            color="danger"
-            variant="light"
+            color="red"
+            variant="outline"
             onClick={() => {
               deleteSession(session.name);
               close();
@@ -75,9 +76,7 @@ const SessionItem: React.FC<SessionItemProps> = ({
           >
             Yes
           </Button>
-          <Button color="primary" onClick={close}>
-            No
-          </Button>
+          <Button onClick={close}>No</Button>
         </div>
       </Modal>
     </Reorder.Item>
@@ -100,7 +99,12 @@ const SessionSwitch: React.FC<SessionSwitchProps> = ({ session }) => {
 
   return (
     <div className="flex justify-center pb-2">
-      <Button variant="default" className="text-2xl font-normal" onClick={open}>
+      <Button
+        variant="default"
+        className="text-2xl font-normal"
+        color="gray"
+        onClick={open}
+      >
         {currentSession?.name}
       </Button>
       <Modal
