@@ -12,7 +12,7 @@ function EventSwitch({ session }: { session: SessionType }) {
             variant="default"
             radius="md"
             color="gray.8"
-            className="text-2xl"
+            className="text-2xl font-normal"
           >
             {session.currentSession?.event}
           </Button>

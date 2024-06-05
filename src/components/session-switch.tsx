@@ -100,7 +100,7 @@ const SessionSwitch: React.FC<SessionSwitchProps> = ({ session }) => {
 
   return (
     <div className="flex justify-center pb-2">
-      <Button variant="default" className="text-2xl" onClick={open}>
+      <Button variant="default" className="text-2xl font-normal" onClick={open}>
         {currentSession?.name}
       </Button>
       <Modal
