@@ -23,8 +23,8 @@
     "framer-motion": "^11.1.9",
     "lucide-react": "^0.378.0",
     "pouchdb-browser": "^8.0.1",
-    "react": "^19.0.0-rc-bf3a29d097-20240603",
-    "react-dom": "^19.0.0-rc-bf3a29d097-20240603",
+    "react": "^19.0.0-rc-1df34bdf62-20240605",
+    "react-dom": "^19.0.0-rc-1df34bdf62-20240605",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-safe-area": "^0.5.1",
     "use-media": "^1.5.0"
