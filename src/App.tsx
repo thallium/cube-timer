@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import Settings from "@/components/settings";
 import DeskTopView from "@/desktop-view";
 import { EventID } from "@/lib/events";

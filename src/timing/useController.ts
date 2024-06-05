@@ -115,7 +115,6 @@ const useController = ({
       window.removeEventListener("keydown", keyDown);
       window.removeEventListener("keyup", keyUp);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transit]);
 
   return { state, down, up };

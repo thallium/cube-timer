@@ -1,4 +1,3 @@
-const { nextui } = require("@nextui-org/theme");
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -10,5 +9,5 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [nextui(), require('tailwindcss-safe-area')],
+  plugins: [require('tailwindcss-safe-area')],
 }
