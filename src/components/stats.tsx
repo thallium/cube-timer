@@ -19,9 +19,9 @@ function Stats({
   return (
     <div
       className={cn(
+        "whitespace-nowrap text-center text-2xl",
         className,
         textSize,
-        "whitespace-nowrap text-center text-2xl",
       )}
     >
       <div>{"#" + attempts.length}</div>
