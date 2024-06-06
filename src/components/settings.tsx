@@ -30,7 +30,7 @@ function Settings({ session }: { session: SessionType }) {
         <div className=" space-y-2 py-2">
           <Textarea
             classNames={{
-              input: "text-2xl",
+              input: "text-xl",
             }}
             placeholder="Remote DB Address"
             value={remoteDB}
@@ -40,7 +40,7 @@ function Settings({ session }: { session: SessionType }) {
             }}
           />
           <Button
-            className=" block text-lg sm:text-2xl"
+            className="block text-lg sm:text-2xl"
             onClick={async () => {
               try {
                 notifications.show({

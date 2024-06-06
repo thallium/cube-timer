@@ -1,12 +1,13 @@
 import { eventList } from "@/lib/events";
 import { SessionType } from "@/lib/useSession";
-import { cn } from "@/lib/utils";
-import { Button, Menu } from "@mantine/core";
+import { Button, Menu, useMantineTheme } from "@mantine/core";
 
 function EventSwitch({ session }: { session: SessionType }) {
+  const theme = useMantineTheme();
+
   return (
     <div className="flex justify-center">
-      <Menu>
+      <Menu radius="lg">
         <Menu.Target>
           <Button
             variant="default"
@@ -26,9 +27,12 @@ function EventSwitch({ session }: { session: SessionType }) {
             <Menu.Item
               key={event}
               aria-label={event}
-              className={cn("text-center text-2xl", {
-                "text-primary": event === session.currentSession?.event,
-              })}
+              className="text-2xl"
+              color={
+                event === session.currentSession?.event
+                  ? theme.primaryColor
+                  : undefined
+              }
               onClick={() => session.changeEvent(event)}
             >
               {event}

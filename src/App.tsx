@@ -12,7 +12,7 @@ import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import { Alg } from "cubing/alg";
 import { randomScrambleForEvent } from "cubing/scramble";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMedia } from "use-media";
 import "./App.css";
 
@@ -28,18 +28,15 @@ function App() {
   const [scramble, setScramble] = useState<Alg>();
   const session = useSession();
 
-  const solveDone = useCallback(
-    (time: number) => {
-      session.addAttempt(time, scramble);
-    },
-    [session.addAttempt, scramble],
-  );
+  const solveDone = (time: number) => {
+    session.addAttempt(time, scramble);
+  };
 
-  const newAttempt = useCallback(() => {
+  const newAttempt = () => {
     genScramble(session.currentSession?.event ?? "333").then((scramble) => {
       setScramble(scramble);
     });
-  }, [session.currentSession]);
+  };
 
   const controller = useController({
     startTimer: start,
