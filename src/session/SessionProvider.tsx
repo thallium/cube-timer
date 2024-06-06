@@ -83,6 +83,27 @@ export const SessionProvider = ({
         console.error(e);
       }
     })();
+    const changes = attemptDB.current
+      .changes({
+        since: "now",
+        live: true,
+        include_docs: true,
+      })
+      .on("change", (change) => {
+        if (change.deleted) {
+          setAttempts((attempts) =>
+            attempts.filter((a) => a._id !== change.id),
+          );
+        } else {
+          setAttempts((attempts) => [
+            ...attempts,
+            change.doc as unknown as AttemptData,
+          ]);
+        }
+      });
+    return () => {
+      changes.cancel();
+    };
   }, []);
 
   const changeSession = (name: string) => {
@@ -127,7 +148,7 @@ export const SessionProvider = ({
         return a;
       });
     await attemptDB.current.bulkDocs(toDeleteAttempts);
-    setAttemptsFromDB();
+    // setAttemptsFromDB();
   };
 
   const addAttempt = (time: number, scramble: Alg | undefined) => {
@@ -140,15 +161,16 @@ export const SessionProvider = ({
       event: session?.event,
       session: session?.name || "default",
     };
-    attemptDB.current.put(attempt).then(() => {
-      setAttemptsFromDB();
-    });
+    attemptDB.current.put(attempt);
+    // .then(() => {
+    //   setAttemptsFromDB();
+    // });
   };
 
   const deleteAttempt = async (id: string) => {
     const doc = await attemptDB.current.get(id);
     await attemptDB.current.remove(doc);
-    await setAttemptsFromDB();
+    // await setAttemptsFromDB();
   };
 
   const changeEvent = async (name: EventID) => {
