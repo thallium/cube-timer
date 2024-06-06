@@ -1,6 +1,22 @@
-import { Button } from "@mantine/core";
+import { ActionIcon } from "@mantine/core";
 import { List, Settings, Timer } from "lucide-react";
-import { ViewType } from "../types/view";
+import { ViewType, viewTypeList } from "../types/view";
+
+interface IconProps {
+  view: ViewType;
+  size: number;
+}
+const IconOf: React.FC<IconProps> = ({ view, size }) => {
+  console.log(view);
+  switch (view) {
+    case "timer":
+      return <Timer size={size} />;
+    case "results":
+      return <List size={size} />;
+    case "settings":
+      return <Settings size={size} />;
+  }
+};
 
 function BottomBar({
   setView,
@@ -9,29 +25,20 @@ function BottomBar({
   setView: (view: ViewType) => void;
   view: string;
 }) {
+  console.log(viewTypeList);
   return (
-    <div className="flex flex-row justify-around border-t-1 py-2 pb-safe-or-4">
-      <Button
-        variant="transparent"
-        onClick={() => setView("timer")}
-        color={view === "timer" ? "" : "dark"}
-      >
-        <Timer size={32} />
-      </Button>
-      <Button
-        variant="transparent"
-        onClick={() => setView("results")}
-        color={view === "results" ? "" : "dark"}
-      >
-        <List size={32} />
-      </Button>
-      <Button
-        variant="transparent"
-        onClick={() => setView("settings")}
-        color={view === "settings" ? "" : "dark"}
-      >
-        <Settings size={32} />
-      </Button>
+    <div className="border-t-1 fixed inset-x-0 bottom-0 flex h-16 flex-row items-center justify-around mb-safe">
+      {viewTypeList.map((viewType) => (
+        <ActionIcon
+          key={viewType}
+          variant="transparent"
+          size="xl"
+          onClick={() => setView(viewType)}
+          color={view === viewType ? "" : "dark"}
+        >
+          <IconOf view={viewType} size={32} />
+        </ActionIcon>
+      ))}
     </div>
   );
 }

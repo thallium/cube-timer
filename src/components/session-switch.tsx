@@ -88,7 +88,7 @@ const SessionSwitch: React.FC<SessionSwitchProps> = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
-    <div className="flex justify-center pb-2">
+    <>
       <Button
         variant="default"
         className="text-2xl font-normal"
@@ -128,7 +128,7 @@ const SessionSwitch: React.FC<SessionSwitchProps> = () => {
           <CreateSession />
         </div>
       </Modal>
-    </div>
+    </>
   );
 };
 

@@ -1,4 +1,3 @@
-import EventSwitch from "@/components/event-switch";
 import Results from "@/components/results";
 import ScrambleDisplay from "@/components/scramble-display";
 import Stats from "@/components/stats";
@@ -30,7 +29,6 @@ function DeskTopView({
       </div>
       <div className="fixed inset-0 top-[3.75rem] z-10 flex touch-none flex-col py-4 pl-[16rem]">
         <div>
-          <EventSwitch />
           <ScrambleBar scramble={scramble?.toString()} />
         </div>
         <div className="flex grow flex-col justify-between">
@@ -42,7 +40,6 @@ function DeskTopView({
           />
         </div>
       </div>
-      {/* </div> */}
     </>
   );
 }

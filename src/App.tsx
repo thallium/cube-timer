@@ -1,12 +1,7 @@
-import Settings from "@/components/settings";
 import DeskTopView from "@/desktop-view";
 import { EventID } from "@/lib/events";
-import MobileLayout from "@/mobile/mobile-layout";
-import MobileResults from "@/mobile/mobile-results";
-import MobileView from "@/mobile/mobile-view";
 import useController from "@/timing/useController";
 import useTimer from "@/timing/useTimer";
-import { ViewType } from "@/types/view";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import { Alg } from "cubing/alg";
@@ -14,6 +9,7 @@ import { randomScrambleForEvent } from "cubing/scramble";
 import { useEffect, useState } from "react";
 import { useMedia } from "use-media";
 import "./App.css";
+import MobileApp from "./mobile/MobileApp";
 import { useSession } from "./session/useSession";
 
 async function genScramble(event: EventID) {
@@ -22,7 +18,6 @@ async function genScramble(event: EventID) {
 
 function App() {
   const isWide = useMedia({ minWidth: "640px" });
-  const [view, setView] = useState<ViewType>("timer");
 
   const { time, start, stop, reset } = useTimer();
   const [scramble, setScramble] = useState<Alg>();
@@ -53,29 +48,23 @@ function App() {
     });
   }, [currentSession]);
 
-  if (view === "timer") {
-    return isWide ? (
-      <DeskTopView scramble={scramble} state={controller.state} time={time} />
-    ) : (
-      <MobileView
-        view={view}
-        scramble={scramble}
-        controller={controller}
-        time={time}
-        setView={setView}
-      />
-    );
-  } else if (view === "results") {
-    return <MobileResults view={view} setView={setView} />;
-  } else if (view === "settings") {
-    return (
-      <MobileLayout setView={setView} view={view}>
-        <Settings />
-      </MobileLayout>
-    );
-  } else {
-    return <></>;
-  }
+  return isWide ? (
+    <DeskTopView scramble={scramble} state={controller.state} time={time} />
+  ) : (
+    <MobileApp scramble={scramble} controller={controller} time={time} />
+  );
+  // } else if (view === "results") {
+  //   return <MobileResults view={view} setView={setView} />;
+  // } else if (view === "settings") {
+  //   return (
+  //     <MobileLayout setView={setView} view={view}>
+  //       <h1 className="my-4 text-4xl">Settings</h1>
+  //       <Settings />
+  //     </MobileLayout>
+  //   );
+  // } else {
+  //   return <></>;
+  // }
 }
 
 export default App;

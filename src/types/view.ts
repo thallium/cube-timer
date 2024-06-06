@@ -1,1 +1,3 @@
-export type ViewType = "timer" | "results" | "settings";
+export const viewTypeList = ["timer", "results", "settings"] as const;
+
+export type ViewType = (typeof viewTypeList)[number];

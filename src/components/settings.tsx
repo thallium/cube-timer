@@ -7,7 +7,11 @@ import PouchDb from "pouchdb-browser";
 import { useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
 
-function Settings() {
+interface SettingsProps {
+  className?: string;
+}
+
+const Settings: React.FC<SettingsProps> = ({ className }) => {
   const [remoteDB, setRemoteDB] = useState(getSetting("remoteDB") || "");
   const {
     // offlineReady: [offlineReady, setOfflineReady],
@@ -25,8 +29,7 @@ function Settings() {
   const { loadFromDB } = useSession();
 
   return (
-    <div className="px-4">
-      <h1 className="my-4 text-4xl">Settings</h1>
+    <div className={className}>
       <Collapse title="Remote Database" className="text-xl">
         <div className=" space-y-2 py-2">
           <Textarea
@@ -41,7 +44,7 @@ function Settings() {
             }}
           />
           <Button
-            className="block text-lg sm:text-2xl"
+            className="block text-lg"
             onClick={async () => {
               try {
                 notifications.show({
@@ -73,6 +76,6 @@ function Settings() {
       )}
     </div>
   );
-}
+};
 
 export default Settings;
