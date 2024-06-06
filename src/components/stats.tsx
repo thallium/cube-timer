@@ -1,19 +1,18 @@
 import FormattedTime from "@/components/FormattedTime";
 import { getStats } from "@/lib/stats";
-import { SessionType } from "@/lib/useSession";
 import { cn } from "@/lib/utils";
+import { useSession } from "@/session/useSession";
 
 function Stats({
-  session,
   className,
   textSize,
 }: {
-  session: SessionType;
   className?: string;
   textSize?: string;
 }) {
-  const attempts = session.attempts.filter(
-    (a) => a.session === session.currentSession!.name,
+  const { attempts: allAttempts, currentSession } = useSession();
+  const attempts = allAttempts.filter(
+    (a) => a.session === currentSession!.name,
   );
   const { ao5, ao12, best } = getStats(attempts);
   return (

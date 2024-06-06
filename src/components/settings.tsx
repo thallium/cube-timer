@@ -1,13 +1,13 @@
 import Collapse from "@/components/ui/collapse";
 import { getSetting, setSetting } from "@/lib/settings";
-import { SessionType } from "@/lib/useSession";
+import { useSession } from "@/session/useSession";
 import { Button, Textarea } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import PouchDb from "pouchdb-browser";
 import { useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
 
-function Settings({ session }: { session: SessionType }) {
+function Settings() {
   const [remoteDB, setRemoteDB] = useState(getSetting("remoteDB") || "");
   const {
     // offlineReady: [offlineReady, setOfflineReady],
@@ -22,6 +22,7 @@ function Settings({ session }: { session: SessionType }) {
       console.log("SW registration error", error);
     },
   });
+  const { loadFromDB } = useSession();
 
   return (
     <div className="px-4">
@@ -48,7 +49,7 @@ function Settings({ session }: { session: SessionType }) {
                   message: "",
                 });
                 await PouchDb.sync("data", remoteDB + "/data");
-                session.loadFromDB();
+                loadFromDB();
                 notifications.show({
                   color: "green",
                   title: "Syncing successful",

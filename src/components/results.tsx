@@ -1,17 +1,12 @@
 import { cn } from "@/lib/utils";
+import { useSession } from "@/session/useSession";
 import { AnimatePresence } from "framer-motion";
-import { SessionType } from "../lib/useSession";
 import AttemptRow from "./AttemptRow";
 
-function Results({
-  className,
-  session,
-}: {
-  className?: string;
-  session: SessionType;
-}) {
-  const attempts = session.attempts.filter(
-    (a) => a.session === session.currentSession!.name,
+function Results({ className }: { className?: string }) {
+  const { attempts: allAttempts, currentSession } = useSession();
+  const attempts = allAttempts.filter(
+    (a) => a.session === currentSession!.name,
   );
   return (
     <>
@@ -23,7 +18,6 @@ function Results({
                 key={row._id}
                 row={row}
                 index={index}
-                session={session}
                 maxDigits={Math.floor(Math.log10(attempts.length)) + 1}
               />
             ))

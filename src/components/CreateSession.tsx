@@ -1,15 +1,14 @@
-import { SessionType } from "@/lib/useSession";
+import { useSession } from "@/session/useSession";
 import { Button, Modal, TextInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import React, { useState } from "react";
 
-interface CreateSessionProps {
-  session: SessionType;
-}
+interface CreateSessionProps {}
 
-const CreateSession: React.FC<CreateSessionProps> = ({ session }) => {
+const CreateSession: React.FC<CreateSessionProps> = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [newSessionName, setNewSessionName] = useState("");
+  const { createSession } = useSession();
   return (
     <>
       <Button variant="outline" className="text-lg" onClick={open}>
@@ -37,7 +36,7 @@ const CreateSession: React.FC<CreateSessionProps> = ({ session }) => {
             variant="bordered"
             className="mt-4 text-lg"
             onClick={() => {
-              session.createSession(newSessionName);
+              createSession(newSessionName);
               close();
             }}
           >

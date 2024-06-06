@@ -1,4 +1,5 @@
-import { Session, SessionType } from "@/lib/useSession";
+import { Session } from "@/session/index";
+import { useSession } from "@/session/useSession";
 import { ActionIcon, Button, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Reorder, useDragControls } from "framer-motion";
@@ -9,19 +10,16 @@ import CreateSession from "./CreateSession";
 interface SessionItemProps {
   session: Session;
   isCurrent: boolean;
-  changeSession: SessionType["changeSession"];
-  deleteSession: SessionType["deleteSession"];
   closeSwitcher: () => void;
 }
 const SessionItem: React.FC<SessionItemProps> = ({
   session,
   isCurrent,
-  changeSession,
-  deleteSession,
   closeSwitcher,
 }) => {
   const dragControls = useDragControls();
   const [opened, { open, close }] = useDisclosure(false);
+  const { changeSession, deleteSession } = useSession();
 
   return (
     <Reorder.Item
@@ -83,18 +81,10 @@ const SessionItem: React.FC<SessionItemProps> = ({
   );
 };
 
-interface SessionSwitchProps {
-  session: SessionType;
-}
+interface SessionSwitchProps {}
 
-const SessionSwitch: React.FC<SessionSwitchProps> = ({ session }) => {
-  const {
-    currentSession,
-    changeSession,
-    sessions,
-    setSessions,
-    deleteSession,
-  } = session;
+const SessionSwitch: React.FC<SessionSwitchProps> = () => {
+  const { currentSession, sessions, setSessions } = useSession();
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
@@ -129,15 +119,13 @@ const SessionSwitch: React.FC<SessionSwitchProps> = ({ session }) => {
                 key={session.name}
                 session={session}
                 isCurrent={currentSession?.name === session.name}
-                changeSession={changeSession}
-                deleteSession={deleteSession}
                 closeSwitcher={close}
               />
             ))}
           </Reorder.Group>
         </div>
         <div className="mt-4 flex flex-row-reverse">
-          <CreateSession session={session} />
+          <CreateSession />
         </div>
       </Modal>
     </div>

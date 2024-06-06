@@ -1,9 +1,10 @@
 import { eventList } from "@/lib/events";
-import { SessionType } from "@/lib/useSession";
+import { useSession } from "@/session/useSession";
 import { Button, Menu, useMantineTheme } from "@mantine/core";
 
-function EventSwitch({ session }: { session: SessionType }) {
+function EventSwitch() {
   const theme = useMantineTheme();
+  const { currentSession, changeEvent } = useSession();
 
   return (
     <div className="flex justify-center">
@@ -15,7 +16,7 @@ function EventSwitch({ session }: { session: SessionType }) {
             color="gray.8"
             className="text-2xl font-normal"
           >
-            {session.currentSession?.event}
+            {currentSession?.event}
           </Button>
         </Menu.Target>
         <Menu.Dropdown
@@ -29,11 +30,9 @@ function EventSwitch({ session }: { session: SessionType }) {
               aria-label={event}
               className="text-2xl"
               color={
-                event === session.currentSession?.event
-                  ? theme.primaryColor
-                  : undefined
+                event === currentSession?.event ? theme.primaryColor : undefined
               }
-              onClick={() => session.changeEvent(event)}
+              onClick={() => changeEvent(event)}
             >
               {event}
             </Menu.Item>

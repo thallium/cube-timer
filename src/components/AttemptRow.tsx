@@ -1,6 +1,6 @@
 import FormattedTime from "@/components/FormattedTime";
 import { AttemptData } from "@/lib/attempt-data";
-import { SessionType } from "@/lib/useSession";
+import { useSession } from "@/session/useSession";
 import { ActionIcon, Button, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { motion } from "framer-motion";
@@ -12,16 +12,11 @@ const t = (d: number) => d * 4;
 interface AttemptRowProps {
   row: AttemptData;
   index: number;
-  session: SessionType;
   maxDigits: number;
 }
 
-const AttemptRow: React.FC<AttemptRowProps> = ({
-  row,
-  index,
-  session,
-  maxDigits,
-}) => {
+const AttemptRow: React.FC<AttemptRowProps> = ({ row, index, maxDigits }) => {
+  const { deleteAttempt } = useSession();
   const { _id, totalResultMs } = row;
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -70,7 +65,7 @@ const AttemptRow: React.FC<AttemptRowProps> = ({
           variant="subtle"
           color="gray.6"
           size="lg"
-          onClick={() => session.deleteAttempt(_id)}
+          onClick={() => deleteAttempt(_id)}
         >
           <X size={24} />
         </ActionIcon>

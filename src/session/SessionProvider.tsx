@@ -1,21 +1,39 @@
+import { AttemptData } from "@/lib/attempt-data";
+import { EventID } from "@/lib/events";
 import { getSetting } from "@/lib/settings";
+import { Session } from "@/session/index";
 import { Alg } from "cubing/alg";
 import PouchDB from "pouchdb-browser";
-import { useEffect, useRef, useState } from "react";
-import { AttemptData } from "./attempt-data";
-import { EventID } from "./events";
+import { createContext, useEffect, useRef, useState } from "react";
 
 interface Sessions {
   sessions: Session[];
 }
 
-export type Session = {
-  name: string; // id is the name of the group
-  event: EventID;
-  createdAt?: number;
+type SessionType = {
+  currentSession: Session | undefined;
+  sessions: Session[];
+
+  changeSession: (name: string) => void;
+  createSession: (name: string) => Promise<void>;
+  setSessions: (sessions: Session[]) => Promise<void>;
+  deleteSession: (name: string) => Promise<void>;
+
+  attempts: AttemptData[];
+  addAttempt: (time: number, scramble: Alg | undefined) => void;
+  deleteAttempt: (id: string) => Promise<void>;
+  changeEvent: (name: EventID) => Promise<void>;
+
+  loadFromDB: () => Promise<void>;
 };
 
-export function useSession() {
+export const SessionContext = createContext<SessionType | undefined>(undefined);
+
+export const SessionProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const dataDB = useRef(new PouchDB("data"));
   const attemptDB = useRef<PouchDB.Database>(new PouchDB("attempts"));
 
@@ -149,19 +167,23 @@ export function useSession() {
     setSession(sessionsTmp[0]);
   };
 
-  return {
-    currentSession: session,
-    sessions: sessions,
-    changeSession,
-    createSession,
-    setSessions,
-    deleteSession,
-    attempts,
-    addAttempt,
-    deleteAttempt,
-    changeEvent,
-    loadFromDB,
-  };
-}
-
-export type SessionType = ReturnType<typeof useSession>;
+  return (
+    <SessionContext.Provider
+      value={{
+        currentSession: session,
+        sessions: sessions,
+        changeSession,
+        createSession,
+        setSessions,
+        deleteSession,
+        attempts,
+        addAttempt,
+        deleteAttempt,
+        changeEvent,
+        loadFromDB,
+      }}
+    >
+      {children}
+    </SessionContext.Provider>
+  );
+};
