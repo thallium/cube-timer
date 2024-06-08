@@ -13,7 +13,6 @@ function EventSwitch() {
           <Button
             variant="default"
             radius="md"
-            color="gray.8"
             className="text-2xl font-normal"
           >
             {currentSession?.event}
@@ -29,9 +28,7 @@ function EventSwitch() {
               key={event}
               aria-label={event}
               className="text-2xl"
-              color={
-                event === currentSession?.event ? theme.primaryColor : undefined
-              }
+              c={event === currentSession?.event ? theme.primaryColor : "text"}
               onClick={() => changeEvent(event)}
             >
               {event}

@@ -7,7 +7,7 @@ const DesktopSettings = () => {
   const [opened, { open, close }] = useDisclosure(false);
   return (
     <>
-      <ActionIcon onClick={open} size="lg" variant="outline" color="gray.7">
+      <ActionIcon onClick={open} size="lg" variant="default">
         <IconSettings size={26} />
       </ActionIcon>
       <Modal

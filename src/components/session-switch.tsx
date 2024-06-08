@@ -32,7 +32,7 @@ const SessionItem: React.FC<SessionItemProps> = ({
       <Button
         variant="subtle"
         fullWidth
-        color={isCurrent ? "" : "dark"}
+        color={isCurrent ? "" : "text"}
         classNames={{
           inner: "text-2xl font-normal justify-start",
         }}
@@ -89,12 +89,7 @@ const SessionSwitch: React.FC<SessionSwitchProps> = () => {
 
   return (
     <>
-      <Button
-        variant="default"
-        className="text-2xl font-normal"
-        color="gray"
-        onClick={open}
-      >
+      <Button variant="default" className="text-2xl font-normal" onClick={open}>
         {currentSession?.name}
       </Button>
       <Modal
