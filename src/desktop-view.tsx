@@ -22,7 +22,7 @@ function DeskTopView({
   return (
     <>
       <TopBar />
-      <div className="border-r-1 fixed bottom-0 top-[3.75rem] z-20 flex w-[16rem] flex-col px-2 py-4">
+      <div className="fixed bottom-0 top-[3.75rem] z-20 flex w-[16rem] flex-col border-r-[1px] px-2 py-4">
         <Stats className="" />
         <Divider className="my-2" />
         <Results />
