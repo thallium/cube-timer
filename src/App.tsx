@@ -46,25 +46,13 @@ function App() {
     genScramble(currentSession?.event ?? "333").then((scramble) => {
       setScramble(scramble);
     });
-  }, [currentSession]);
+  }, [currentSession?.event]);
 
   return isWide ? (
     <DeskTopView scramble={scramble} state={controller.state} time={time} />
   ) : (
     <MobileApp scramble={scramble} controller={controller} time={time} />
   );
-  // } else if (view === "results") {
-  //   return <MobileResults view={view} setView={setView} />;
-  // } else if (view === "settings") {
-  //   return (
-  //     <MobileLayout setView={setView} view={view}>
-  //       <h1 className="my-4 text-4xl">Settings</h1>
-  //       <Settings />
-  //     </MobileLayout>
-  //   );
-  // } else {
-  //   return <></>;
-  // }
 }
 
 export default App;
