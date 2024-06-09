@@ -3,7 +3,7 @@ import Results from "@/components/results";
 import ScrambleBar from "@/components/scramble-bar";
 import ScrambleDisplay from "@/components/scramble-display";
 import SessionSwitch from "@/components/session-switch";
-import MobileSettings from "@/components/settings/settings";
+import MobileSettings from "@/components/settings/MobileSettings";
 import Stats from "@/components/stats";
 import Timer from "@/components/timer";
 import { useSession } from "@/session/useSession";

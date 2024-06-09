@@ -3,29 +3,10 @@ import { useSession } from "@/session/useSession";
 import { Button, TextInput, TextInputProps } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { Check, X } from "lucide-react";
-import PouchDb from "pouchdb-browser";
-import React, { useContext, useState } from "react";
-
-type ContextType = {
-  remoteDB: string;
-  setRemoteDB: React.Dispatch<React.SetStateAction<string>>;
-};
-
-const RemoteDbContext = React.createContext<ContextType | undefined>(undefined);
-
-export const SyncProvider: React.FC<React.PropsWithChildren> = ({
-  children,
-}) => {
-  const [remoteDB, setRemoteDB] = useState(getSetting("remoteDB") || "");
-  return (
-    <RemoteDbContext.Provider value={{ remoteDB, setRemoteDB }}>
-      {children}
-    </RemoteDbContext.Provider>
-  );
-};
+import React, { useState } from "react";
 
 export const RemoteDbInput: React.FC<TextInputProps> = ({ className }) => {
-  const { remoteDB, setRemoteDB } = useContext(RemoteDbContext)!;
+  const [remoteDB, setRemoteDB] = useState(getSetting("remoteDB") || "");
   return (
     <TextInput
       label="Sync database address"
@@ -44,8 +25,7 @@ export const RemoteDbInput: React.FC<TextInputProps> = ({ className }) => {
 };
 
 export const SyncButton: React.FC = () => {
-  const { remoteDB } = useContext(RemoteDbContext)!;
-  const { loadFromDB } = useSession();
+  const { syncWithRemoteDB } = useSession();
   const [syncingState, setSyncingState] = useState("done");
 
   return (
@@ -69,8 +49,7 @@ export const SyncButton: React.FC = () => {
       onClick={async () => {
         try {
           setSyncingState("syncing");
-          await PouchDb.sync("data", remoteDB + "/data");
-          loadFromDB();
+          await syncWithRemoteDB();
           setSyncingState("success");
           setTimeout(() => setSyncingState("done"), 2000);
         } catch (e) {

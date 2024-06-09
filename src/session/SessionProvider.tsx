@@ -2,9 +2,10 @@ import { AttemptData } from "@/lib/attempt-data";
 import { EventID } from "@/lib/events";
 import { getSetting } from "@/lib/settings";
 import { Session } from "@/session/index";
+import { notifications } from "@mantine/notifications";
 import { Alg } from "cubing/alg";
 import PouchDB from "pouchdb-browser";
-import { createContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useEffect, useRef, useState } from "react";
 
 interface Sessions {
   sessions: Session[];
@@ -24,7 +25,7 @@ type SessionType = {
   deleteAttempt: (id: string) => Promise<void>;
   changeEvent: (name: EventID) => Promise<void>;
 
-  loadFromDB: () => Promise<void>;
+  syncWithRemoteDB: () => Promise<void>;
 };
 
 export const SessionContext = createContext<SessionType | undefined>(undefined);
@@ -36,6 +37,8 @@ export const SessionProvider = ({
 }) => {
   const dataDB = useRef(new PouchDB("data"));
   const attemptDB = useRef<PouchDB.Database>(new PouchDB("attempts"));
+  const attemptsSync = useRef<PouchDB.Replication.Sync<object>>();
+  const dataSync = useRef<PouchDB.Replication.Sync<object>>();
 
   const [sessions, setSessionsState] = useState<Session[]>([]);
   const [session, setSession] = useState<Session>();
@@ -46,44 +49,63 @@ export const SessionProvider = ({
     setAttempts(res.rows.map((row) => row.doc as unknown as AttemptData));
   };
 
-  useEffect(() => {
-    (async () => {
-      // Create default session if it doesn't exist
-      try {
-        await dataDB.current.get("sessions");
-      } catch (e) {
-        await dataDB.current.put({
-          _id: "sessions",
-          sessions: [
-            {
-              name: "default",
-              event: "333",
-              createdAt: Date.now(),
-            } as Session,
-          ],
-        });
-      }
-
-      // Set current session and sessions
-      const sessionsTmp = ((await dataDB.current.get("sessions")) as Sessions)
+  const loadFromDB = useCallback(async () => {
+    let sessionsTmp: Session[];
+    // Create default session if it doesn't exist
+    try {
+      sessionsTmp = ((await dataDB.current.get("sessions")) as Sessions)
         .sessions;
-      setSessionsState(sessionsTmp);
-      // TODO: save the last session in local storage
-      setSession(sessionsTmp[0]);
+    } catch (e) {
+      sessionsTmp = [
+        {
+          name: "default",
+          event: "333",
+          createdAt: Date.now(),
+        } as Session,
+      ];
+      await dataDB.current.put({
+        _id: "sessions",
+        sessions: sessionsTmp,
+      });
+    }
+    setSessionsState(sessionsTmp);
+    // TODO: save the last session in local storage
+    setSession(sessionsTmp[0]);
 
-      // Set attempts
-      await setAttemptsFromDB();
+    await setAttemptsFromDB();
+  }, []);
 
-      try {
-        PouchDB.sync("attempts", getSetting("remoteDB") + "/attempts", {
+  const syncWithRemoteDB = useCallback(async () => {
+    try {
+      attemptsSync.current?.cancel();
+
+      dataSync.current = PouchDB.sync(
+        "data",
+        getSetting("remoteDB") + "/data",
+        {
           live: true,
           retry: true,
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-    const changes = attemptDB.current
+        },
+      );
+      attemptsSync.current = PouchDB.sync(
+        "attempts",
+        getSetting("remoteDB") + "/attempts",
+        {
+          live: true,
+          retry: true,
+        },
+      );
+    } catch (e) {
+      console.error(e);
+    }
+    await loadFromDB();
+  }, [loadFromDB]);
+
+  useEffect(() => {
+    loadFromDB();
+    syncWithRemoteDB();
+
+    const attemptDbChanges = attemptDB.current
       .changes({
         since: "now",
         live: true,
@@ -101,10 +123,27 @@ export const SessionProvider = ({
           ]);
         }
       });
+
+    const dataDbChanges = dataDB.current
+      .changes({
+        since: "now",
+        live: true,
+        include_docs: true,
+      })
+      .on("change", (change) => {
+        if (!change.deleted && change.doc?._id === "sessions") {
+          const newSessions = (change.doc as unknown as Sessions).sessions;
+          // if (!newSessions.some((s) => s.name === session?.name)) {
+          //   setSession(newSessions[0]);
+          // }
+          setSessionsState(newSessions);
+        }
+      });
     return () => {
-      changes.cancel();
+      attemptDbChanges.cancel();
+      dataDbChanges.cancel();
     };
-  }, []);
+  }, [loadFromDB, syncWithRemoteDB]);
 
   const changeSession = (name: string) => {
     setSession(sessions.find((s) => s.name === name));
@@ -118,7 +157,7 @@ export const SessionProvider = ({
         _rev: doc._rev,
         sessions,
       });
-      setSessionsState(sessions);
+      // setSessionsState(sessions);
     } catch (e) {
       console.error(e);
     }
@@ -136,7 +175,11 @@ export const SessionProvider = ({
   const deleteSession = async (toDelete: string) => {
     const newSessions = sessions.filter((s) => s.name !== toDelete);
     if (newSessions.length === 0) {
-      alert("Can't delete the last session");
+      notifications.show({
+        title: "Can't delete the last session",
+        message: "",
+        color: "red",
+      });
       return;
     }
     setSessions(newSessions);
@@ -148,7 +191,6 @@ export const SessionProvider = ({
         return a;
       });
     await attemptDB.current.bulkDocs(toDeleteAttempts);
-    // setAttemptsFromDB();
   };
 
   const addAttempt = (time: number, scramble: Alg | undefined) => {
@@ -162,15 +204,11 @@ export const SessionProvider = ({
       session: session?.name || "default",
     };
     attemptDB.current.put(attempt);
-    // .then(() => {
-    //   setAttemptsFromDB();
-    // });
   };
 
   const deleteAttempt = async (id: string) => {
     const doc = await attemptDB.current.get(id);
     await attemptDB.current.remove(doc);
-    // await setAttemptsFromDB();
   };
 
   const changeEvent = async (name: EventID) => {
@@ -179,14 +217,6 @@ export const SessionProvider = ({
     const newSessions = [...sessions];
     newSessions.find((s) => s.name === session.name)!.event = name;
     setSessions(newSessions);
-  };
-
-  const loadFromDB = async () => {
-    const sessionsTmp = ((await dataDB.current.get("sessions")) as Sessions)
-      .sessions;
-    setSessionsState(sessionsTmp);
-    // TODO: save the last session in local storage
-    setSession(sessionsTmp[0]);
   };
 
   return (
@@ -202,7 +232,7 @@ export const SessionProvider = ({
         addAttempt,
         deleteAttempt,
         changeEvent,
-        loadFromDB,
+        syncWithRemoteDB,
       }}
     >
       {children}

@@ -1,7 +1,7 @@
 import { ActionIcon, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Settings as IconSettings } from "lucide-react";
-import { RemoteDbInput, SyncButton, SyncProvider } from "./Sync";
+import { RemoteDbInput, SyncButton } from "./Sync";
 import UpdateSW from "./UpdateSW";
 
 const DesktopSettings = () => {
@@ -23,12 +23,10 @@ const DesktopSettings = () => {
           title: "text-2xl",
         }}
       >
-        <SyncProvider>
-          <div className="flex items-end justify-between gap-2">
-            <RemoteDbInput className="grow" />
-            <SyncButton />
-          </div>
-        </SyncProvider>
+        <div className="flex items-end justify-between gap-2">
+          <RemoteDbInput className="grow" />
+          <SyncButton />
+        </div>
         <UpdateSW />
       </Modal>
     </>
