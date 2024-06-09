@@ -115,7 +115,7 @@ const useController = ({
       window.removeEventListener("keydown", keyDown);
       window.removeEventListener("keyup", keyUp);
     };
-  }, [transit]);
+  }, [transit, down, up]);
 
   return { state, down, up };
 };

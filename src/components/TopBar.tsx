@@ -1,8 +1,8 @@
 import React from "react";
 import ColorSwitch from "./ColorSwitch";
-import DesktopSettings from "./DesktopSettings";
 import EventSwitch from "./event-switch";
 import SessionSwitch from "./session-switch";
+import DesktopSettings from "./settings/DesktopSettings";
 
 interface TopBarProps {}
 

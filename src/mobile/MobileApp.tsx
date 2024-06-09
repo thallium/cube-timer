@@ -3,7 +3,7 @@ import Results from "@/components/results";
 import ScrambleBar from "@/components/scramble-bar";
 import ScrambleDisplay from "@/components/scramble-display";
 import SessionSwitch from "@/components/session-switch";
-import Settings from "@/components/settings";
+import MobileSettings from "@/components/settings/settings";
 import Stats from "@/components/stats";
 import Timer from "@/components/timer";
 import { useSession } from "@/session/useSession";
@@ -31,7 +31,7 @@ const MobileTimer: React.FC<MobileAppProps> = ({
       touchAreaTmp?.removeEventListener("touchstart", down);
       touchAreaTmp?.removeEventListener("touchend", up);
     };
-  }, [touchArea.current]);
+  }, [down, up]);
 
   return (
     <>
@@ -63,13 +63,6 @@ const MobileResults: React.FC = () => {
     </>
   );
 };
-
-const MobileSettings: React.FC = () => (
-  <>
-    <h1 className="my-4 text-4xl">Settings</h1>
-    <Settings />
-  </>
-);
 
 interface MobileAppProps {
   scramble: Alg | undefined;

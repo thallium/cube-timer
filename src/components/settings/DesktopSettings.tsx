@@ -1,7 +1,8 @@
 import { ActionIcon, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Settings as IconSettings } from "lucide-react";
-import Settings from "./settings";
+import { RemoteDbInput, SyncButton, SyncProvider } from "./Sync";
+import UpdateSW from "./UpdateSW";
 
 const DesktopSettings = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -15,12 +16,20 @@ const DesktopSettings = () => {
         opened={opened}
         onClose={close}
         padding="lg"
+        size="xl"
         title="Settings"
         classNames={{
+          body: "flex flex-col gap-4",
           title: "text-2xl",
         }}
       >
-        <Settings />
+        <SyncProvider>
+          <div className="flex items-end justify-between gap-2">
+            <RemoteDbInput className="grow" />
+            <SyncButton />
+          </div>
+        </SyncProvider>
+        <UpdateSW />
       </Modal>
     </>
   );

@@ -7,7 +7,6 @@ interface IconProps {
   size: number;
 }
 const IconOf: React.FC<IconProps> = ({ view, size }) => {
-  console.log(view);
   switch (view) {
     case "timer":
       return <Timer size={size} />;
@@ -25,7 +24,6 @@ function BottomBar({
   setView: (view: ViewType) => void;
   view: string;
 }) {
-  console.log(viewTypeList);
   return (
     <div className="border-t-1 fixed inset-x-0 bottom-0 flex h-16 flex-row items-center justify-around mb-safe">
       {viewTypeList.map((viewType) => (
