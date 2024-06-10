@@ -2,6 +2,7 @@ import { ActionIcon, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Settings as IconSettings } from "lucide-react";
 import { RemoteDbInput, SyncButton } from "./Sync";
+import ThemeButtons from "./ThemeButtons";
 import UpdateSW from "./UpdateSW";
 
 const DesktopSettings = () => {
@@ -19,7 +20,7 @@ const DesktopSettings = () => {
         size="xl"
         title="Settings"
         classNames={{
-          body: "flex flex-col gap-4",
+          body: "flex flex-col gap-4 text-lg",
           title: "text-2xl",
         }}
       >
@@ -28,6 +29,10 @@ const DesktopSettings = () => {
           <SyncButton />
         </div>
         <UpdateSW />
+        <div className="flex items-center justify-between">
+          <p>Theme</p>
+          <ThemeButtons />
+        </div>
       </Modal>
     </>
   );
