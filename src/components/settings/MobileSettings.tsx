@@ -7,7 +7,7 @@ const MobileSettings: React.FC = () => {
     <>
       <h1 className="my-4 text-4xl">Settings</h1>
       <div className="flex flex-col gap-4">
-        <Collapse title="Remote Database" className="text-xl">
+        <Collapse title="Remote Database" className="text-lg">
           <div className="space-y-2 py-2">
             <RemoteDbInput />
             <SyncButton />
