@@ -40,7 +40,7 @@ const AttemptRow: React.FC<AttemptRowProps> = ({ row, index, maxDigits }) => {
       }}
       key={_id}
     >
-      <div className="flex flex-row items-center justify-between border-b-1 py-2">
+      <div className="border-b-1 flex flex-row items-center justify-between py-2">
         <Button
           variant="subtle"
           color="gray.6"
@@ -52,7 +52,7 @@ const AttemptRow: React.FC<AttemptRowProps> = ({ row, index, maxDigits }) => {
         </Button>
         <Button
           variant="subtle"
-          color="dark"
+          color="text"
           className="grow text-2xl font-normal"
           classNames={{
             inner: "justify-start",
