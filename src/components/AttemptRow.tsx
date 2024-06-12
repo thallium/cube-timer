@@ -1,11 +1,10 @@
 import FormattedTime from "@/components/FormattedTime";
 import { AttemptData } from "@/lib/attempt-data";
 import { useSession } from "@/session/useSession";
-import { ActionIcon, Button, Modal } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { ActionIcon, Button } from "@mantine/core";
+import { modals } from "@mantine/modals";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
-import Collapse from "./ui/collapse";
 
 const t = (d: number) => d * 4;
 
@@ -18,7 +17,16 @@ interface AttemptRowProps {
 const AttemptRow: React.FC<AttemptRowProps> = ({ row, index, maxDigits }) => {
   const { deleteAttempt } = useSession();
   const { _id, totalResultMs } = row;
-  const [opened, { open, close }] = useDisclosure(false);
+
+  const open = () => {
+    modals.openContextModal({
+      modal: "singleAttempt",
+      title: `Attempt #${index + 1}`,
+      innerProps: { attempt: row },
+      padding: "lg",
+      centered: true,
+    });
+  };
 
   return (
     <motion.div
@@ -70,25 +78,6 @@ const AttemptRow: React.FC<AttemptRowProps> = ({ row, index, maxDigits }) => {
           <X size={24} />
         </ActionIcon>
       </div>
-      <Modal
-        centered
-        opened={opened}
-        onClose={close}
-        padding="lg"
-        title={`Attempt #${index + 1}`}
-      >
-        <div className="flex flex-col gap-3 py-2 text-xl">
-          <FormattedTime
-            className="text-center text-3xl"
-            time={totalResultMs}
-          />
-          <Collapse title="Scramble">
-            <div className="font-mono">{row.scramble || "No Scramble"}</div>
-          </Collapse>
-          <p>Date: {new Date(row.unixDate).toLocaleString()}</p>
-          <p>Event: {row.event}</p>
-        </div>
-      </Modal>
     </motion.div>
   );
 };

@@ -2,6 +2,7 @@ import { Session } from "@/session/index";
 import { useSession } from "@/session/useSession";
 import { ActionIcon, Button, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { modals } from "@mantine/modals";
 import { Reorder, useDragControls } from "framer-motion";
 import { GripVertical, Trash2 } from "lucide-react";
 import React from "react";
@@ -18,8 +19,21 @@ const SessionItem: React.FC<SessionItemProps> = ({
   closeSwitcher,
 }) => {
   const dragControls = useDragControls();
-  const [opened, { open, close }] = useDisclosure(false);
   const { changeSession, deleteSession } = useSession();
+
+  const confirmDelete = (sessionName: string) =>
+    modals.openConfirmModal({
+      title: "Delete session?",
+      children: (
+        <div className="text-xl">
+          Do you really want to delete this session? Results in this session
+          will also be deleted.
+        </div>
+      ),
+      labels: { confirm: "Delete", cancel: "Cancel" },
+      confirmProps: { color: "red" },
+      onConfirm: () => deleteSession(sessionName),
+    });
 
   return (
     <Reorder.Item
@@ -43,40 +57,17 @@ const SessionItem: React.FC<SessionItemProps> = ({
       >
         {session.name}
       </Button>
-      <ActionIcon variant="subtle" color="dark" onClick={open}>
+      <ActionIcon
+        variant="subtle"
+        color="dark"
+        onClick={() => confirmDelete(session.name)}
+      >
         <Trash2 />
       </ActionIcon>
       <GripVertical
         className=" cursor-grab"
         onPointerDown={(e) => dragControls.start(e)}
       />
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="Warning"
-        classNames={{
-          title: "text-large font-semibold",
-        }}
-        radius="lg"
-      >
-        <div className="text-xl">
-          Do you really want to delete this session? Results in this session
-          will also be deleted.
-        </div>
-        <div className="mt-4 flex justify-end gap-2">
-          <Button
-            color="red"
-            variant="outline"
-            onClick={() => {
-              deleteSession(session.name);
-              close();
-            }}
-          >
-            Yes
-          </Button>
-          <Button onClick={close}>No</Button>
-        </div>
-      </Modal>
     </Reorder.Item>
   );
 };
