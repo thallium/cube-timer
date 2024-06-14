@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
 import { useSession } from "@/session/useSession";
+import { ScrollArea } from "@mantine/core";
 import { AnimatePresence } from "framer-motion";
 import AttemptRow from "./AttemptRow";
 
@@ -9,22 +9,20 @@ function Results({ className }: { className?: string }) {
     (a) => a.session === currentSession!.name,
   );
   return (
-    <>
-      <div className={cn(className, "overflow-y-auto")}>
-        <AnimatePresence initial={false}>
-          {attempts
-            .map((row, index) => (
-              <AttemptRow
-                key={row._id}
-                row={row}
-                index={index}
-                maxDigits={Math.floor(Math.log10(attempts.length)) + 1}
-              />
-            ))
-            .toReversed()}
-        </AnimatePresence>
-      </div>
-    </>
+    <ScrollArea className={className} type="scroll" scrollHideDelay={300}>
+      <AnimatePresence initial={false}>
+        {attempts
+          .map((row, index) => (
+            <AttemptRow
+              key={row._id}
+              row={row}
+              index={index}
+              maxDigits={Math.floor(Math.log10(attempts.length)) + 1}
+            />
+          ))
+          .toReversed()}
+      </AnimatePresence>
+    </ScrollArea>
   );
 }
 
