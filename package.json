@@ -26,6 +26,7 @@
     "pouchdb-browser": "^8.0.1",
     "react": "^19.0.0-rc-1df34bdf62-20240605",
     "react-dom": "^19.0.0-rc-1df34bdf62-20240605",
+    "react-viewport-list": "^7.1.2",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-safe-area": "^0.5.1",
     "use-media": "^1.5.0"
