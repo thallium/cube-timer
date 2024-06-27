@@ -12,7 +12,7 @@ export enum State {
 const transition: readonly State[][] = [
   [State.Ignore, State.Done],
   [State.Stopped, State.Ignore],
-  [State.Ignore, State.Done],
+  [State.HandOnTimer, State.Done],
   [State.HandOnTimer, State.Done],
   [State.Ignore, State.Running],
   [State.Ignore, State.Ignore],
