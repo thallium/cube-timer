@@ -18,7 +18,7 @@
     "@types/pouchdb-browser": "^6.1.5",
     "babel-plugin-react-compiler": "^0.0.0-experimental-938cd9a-20240601",
     "clsx": "^2.1.1",
-    "cubing": "^0.48.4",
+    "cubing": "^0.49.0",
     "eslint-plugin-react-compiler": "^0.0.0-experimental-51a85ea-20240601",
     "events": "^3.3.0",
     "framer-motion": "^11.1.9",

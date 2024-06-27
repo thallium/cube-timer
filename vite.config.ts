@@ -1,7 +1,26 @@
 import react from "@vitejs/plugin-react";
 import path from "path";
-import { defineConfig } from "vite";
+import { Plugin, defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
+
+function myPlugin(): Plugin {
+  return {
+    name: "remove meta.resolve",
+    transform(code, id) {
+      if (
+        id.includes("cubing") &&
+        code.includes('return import.meta.resolve("./search-worker-entry.js")')
+      ) {
+        code = code.replace(
+          'return import.meta.resolve("./search-worker-entry.js")',
+          "throw new Error();",
+        );
+      }
+
+      return code;
+    },
+  };
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,6 +30,7 @@ export default defineConfig({
     },
   },
   plugins: [
+    myPlugin(),
     react({
       babel: {
         plugins: [["babel-plugin-react-compiler"]],
@@ -21,6 +41,7 @@ export default defineConfig({
       manifest: {
         name: "Tl Timer",
         description: "A cube timer",
+        theme_color: "#ffffff",
         icons: [
           {
             src: "pwa-64x64.png",
